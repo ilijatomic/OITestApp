@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">OITestApp</string>
+    <string name="exception_error">Something went wrong, please try again</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+
+    <string name="login_error_username_empty">Username and password cannot be empty.</string>
+    <string name="login_error_username_incorrect">Incorrect username or password.</string>
+</resources>
