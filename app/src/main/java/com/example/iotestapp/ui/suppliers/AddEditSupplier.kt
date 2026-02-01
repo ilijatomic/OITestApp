@@ -1,10 +1,14 @@
 package com.example.iotestapp.ui.suppliers
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,17 +21,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Supplier
+import com.example.iotestapp.ui.common.HorizontalSpacerSmall
+import com.example.iotestapp.ui.common.ViewModelState
 
 @Composable
 fun AddEditSupplier(
     supplier: Supplier?,
+    saveState: ViewModelState<Boolean>,
     onDismiss: () -> Unit,
     onConfirm: (Supplier) -> Unit
 ) {
+    Log.d("TAG", "AddEditSupplier: ")
     var name by remember { mutableStateOf(supplier?.name ?: "") }
     var contactPerson by remember { mutableStateOf(supplier?.contactPerson ?: "") }
     var phone by remember { mutableStateOf(supplier?.phone ?: "") }
@@ -36,9 +46,15 @@ fun AddEditSupplier(
 
     val inputValid by remember {
         derivedStateOf {
-            name.isNotEmpty() && contactPerson.isNotEmpty() && phone.isNotEmpty() && email.isNotEmpty() && address.isNotEmpty()
+            name.isNotEmpty() &&
+            contactPerson.isNotEmpty() &&
+            phone.isNotEmpty() &&
+            email.isNotEmpty() &&
+            address.isNotEmpty()
         }
     }
+
+    val isSaving = saveState is ViewModelState.Loading
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(shape = RoundedCornerShape(16.dp)) {
@@ -51,36 +67,54 @@ fun AddEditSupplier(
                     value = name,
                     onValueChange = { name = it },
                     label = { Text(stringResource(R.string.name)) },
-                    singleLine = true
+                    singleLine = true,
+                    enabled = !isSaving
                 )
                 OutlinedTextField(
                     value = contactPerson,
                     onValueChange = { contactPerson = it },
                     label = { Text(stringResource(R.string.contact_person)) },
-                    singleLine = true
+                    singleLine = true,
+                    enabled = !isSaving
                 )
                 OutlinedTextField(
                     value = phone,
                     onValueChange = { phone = it },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Phone,
+                        imeAction = ImeAction.Done
+                    ),
                     label = { Text(stringResource(R.string.phone)) },
-                    singleLine = true
+                    singleLine = true,
+                    enabled = !isSaving
                 )
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
                     label = { Text(stringResource(R.string.email)) },
-                    singleLine = true
+                    singleLine = true,
+                    enabled = !isSaving
                 )
                 OutlinedTextField(
                     value = address,
                     onValueChange = { address = it },
                     label = { Text(stringResource(R.string.address)) },
-                    singleLine = true
+                    singleLine = true,
+                    enabled = !isSaving
                 )
+
+                if (saveState is ViewModelState.Error) {
+                    HorizontalSpacerSmall()
+                    Text(
+                        text = stringResource(saveState.id),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
 
                 Row(modifier = Modifier.align(Alignment.End)) {
                     Button(
-                        onClick = onDismiss
+                        onClick = onDismiss,
+                        enabled = !isSaving
                     ) {
                         Text(stringResource(R.string.cancel))
                     }
@@ -98,9 +132,13 @@ fun AddEditSupplier(
                                 )
                             )
                         },
-                        enabled = inputValid
+                        enabled = inputValid && !isSaving
                     ) {
-                        Text(stringResource(R.string.save))
+                        if (isSaving) {
+                            CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
+                        } else {
+                            Text(stringResource(R.string.save))
+                        }
                     }
                 }
             }

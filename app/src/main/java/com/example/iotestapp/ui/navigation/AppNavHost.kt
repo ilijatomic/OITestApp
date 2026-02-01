@@ -43,6 +43,7 @@ import com.example.iotestapp.R
 import com.example.iotestapp.ui.common.HorizontalSpacerLarge
 import com.example.iotestapp.ui.dashboard.DashboardScreen
 import com.example.iotestapp.ui.login.LoginScreen
+import com.example.iotestapp.ui.products.ProductsScreen
 import com.example.iotestapp.ui.suppliers.SuppliersScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -106,6 +107,9 @@ fun AppNavHost() {
                 composable(Screen.Dashboard.route) {
                     DashboardScreen()
                 }
+                composable(Screen.Products.route) {
+                    ProductsScreen()
+                }
                 composable(Screen.Suppliers.route) {
                     SuppliersScreen()
                 }
@@ -137,7 +141,7 @@ fun AppDrawerContent(
                     scope.launch { drawerState.close() }
                     if (currentRoute != it.route) {
                         navController.navigate(it.route) {
-                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            popUpTo(navController.graph.id) { saveState = true }
                             launchSingleTop = true
                             restoreState = true
                         }

@@ -15,9 +15,9 @@ class LoginUseCase @Inject constructor(
             if (username.isBlank() || password.isBlank()) {
                 return Resource.Error(R.string.login_error_username_empty)
             }
-            val userEntity = loginRepository.login(User(username, password))
-            userEntity?.let {
-                return Resource.Success(userEntity.toDomain())
+            val user = loginRepository.login(User(username, password))
+            user?.let {
+                return Resource.Success(user)
             }
             return Resource.Error(R.string.login_error_username_incorrect)
         } catch (e: Exception) {

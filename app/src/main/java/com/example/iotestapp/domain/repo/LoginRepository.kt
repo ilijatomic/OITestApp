@@ -5,7 +5,7 @@ import com.example.iotestapp.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
 interface LoginRepository {
-    suspend fun login(user: User): UserEntity?
+    suspend fun login(user: User): User?
     suspend fun checkLogin(): Boolean
     suspend fun logout()
 }

@@ -5,23 +5,39 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="dashboard">Home</string>
-    <string name="suppliers">Suppliers</string>
     <string name="logout">Logout</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="invalid_input">Invalid input</string>
 
     <string name="name">Name</string>
     <string name="contact_person">Contact person</string>
     <string name="phone">Phone</string>
     <string name="email">Email</string>
     <string name="address">Address</string>
+    <string name="description">Description</string>
+    <string name="price">Price</string>
+    <string name="category">Category</string>
+    <string name="barcode">Barcode</string>
+    <string name="supplier">Supplier</string>
+    <string name="current_stock_level">Current stock level</string>
+    <string name="minimum_stock_level">Minimum stock level</string>
 
     <string name="login_error_username_empty">Username and password cannot be empty.</string>
     <string name="login_error_username_incorrect">Incorrect username or password.</string>
 
+    <string name="supplier_title">Suppliers</string>
     <string name="supplier_search_hint">Search supplier…</string>
     <string name="supplier_empty">No supplier found.</string>
     <string name="supplier_error_save">Unable to save supplier.</string>
     <string name="supplier_add">Add supplier</string>
     <string name="supplier_edit">Edit supplier</string>
+
+    <string name="product_title">Products</string>
+    <string name="product_search_hint">Search product…</string>
+    <string name="product_empty">No product found.</string>
+    <string name="product_add">Add product</string>
+    <string name="product_edit">Edit product</string>
+    <string name="supplier_id">Supplier ID</string>
+    <string name="product_error_save">Unable to save product.</string>
 </resources>

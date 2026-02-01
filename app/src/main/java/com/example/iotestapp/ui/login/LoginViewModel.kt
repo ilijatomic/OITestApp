@@ -44,7 +44,7 @@ class LoginViewModel @Inject constructor(
                         _loginState.value = State.Idle
                     }
                 }
-                is Resource.Error<*> -> postError(result)
+                is Resource.Error<*> -> postError(result, _loginState)
             }
         }
     }
@@ -57,20 +57,10 @@ class LoginViewModel @Inject constructor(
                 delay(2000) // simulating login time
                 when (result) {
                     is Resource.Success<*> -> _loginState.value = ViewModelState.Result(Unit)
-                    is Resource.Error<*> -> postError(result)
+                    is Resource.Error<*> -> postError(result, _loginState)
 
                 }
             }
-        }
-    }
-
-    override fun postError(error: Resource.Error<*>) {
-        error.id?.let {
-            _loginState.value = ViewModelState.Error(it)
-        }
-        error.message?.let {
-            Log.e(TAG, it)
-            _loginState.value = ViewModelState.Error()
         }
     }
 

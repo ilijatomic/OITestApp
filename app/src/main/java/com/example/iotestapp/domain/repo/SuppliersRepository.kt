@@ -7,6 +7,6 @@ import com.example.iotestapp.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
 interface SuppliersRepository {
-    suspend fun addEditSupplier(supplier: Supplier): SupplierEntity?
-    suspend fun getAllSuppliers(): List<SupplierEntity>
+    suspend fun addEditSupplier(supplier: Supplier): Supplier?
+    suspend fun getAllSuppliers(): List<Supplier>
 }

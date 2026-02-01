@@ -1,4 +1,4 @@
-package com.example.iotestapp.ui.suppliers
+package com.example.iotestapp.ui.products
 
 import android.util.Log
 import androidx.compose.foundation.layout.Box
@@ -30,57 +30,50 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.iotestapp.R
-import com.example.iotestapp.domain.model.Supplier
+import com.example.iotestapp.domain.model.Product
 import com.example.iotestapp.ui.common.HorizontalSpacerLarge
 import com.example.iotestapp.ui.common.ViewModelState
-import com.example.iotestapp.ui.login.LoginViewModel.Companion.TAG
-import com.example.iotestapp.ui.products.ProductsViewModel
 
 @Composable
-fun SuppliersScreen(
-    viewModel: SuppliersViewModel = hiltViewModel()
+fun ProductsScreen(
+    viewModel: ProductsViewModel = hiltViewModel(),
 ) {
-    Log.d("SuppliersScreen", "SuppliersScreen: ")
+    Log.d("ProductsScreen", "ProductsScreen")
     var searchQuery by remember { mutableStateOf("") }
+    val productsList by viewModel.productsList.collectAsState()
     val suppliersList by viewModel.suppliersList.collectAsState()
-    val saveSupplier by viewModel.saveSupplier.collectAsState()
+    val saveProduct by viewModel.saveProduct.collectAsState()
 
     var showAddDialog by remember { mutableStateOf(false) }
-    var editSupplier by remember { mutableStateOf<Supplier?>(null) }
+    var editProduct by remember { mutableStateOf<Product?>(null) }
 
-    Surface(
-        modifier = Modifier
-            .fillMaxSize(),
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(16.dp),
             ) {
                 SearchBar(
                     searchQuery = searchQuery,
                     onSearchChange = {
                         searchQuery = it
                         viewModel.updateSearchQuery(it)
-                    }
+                    },
                 )
                 HorizontalSpacerLarge()
-                when (suppliersList) {
+
+                when (productsList) {
                     is ViewModelState.Loading -> {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             CircularProgressIndicator()
                         }
                     }
-
                     is ViewModelState.Result -> {
-                        val data = (suppliersList as ViewModelState.Result<List<Supplier>>).data
-                        SuppliersList(
-                            data,
-                            { editSupplier = it }
+                        val data = (productsList as ViewModelState.Result<List<Product>>).data
+                        ProductsList(
+                            products = data,
+                            onProductClick = { editProduct = it },
                         )
                     }
                 }
@@ -90,29 +83,28 @@ fun SuppliersScreen(
                 onClick = { showAddDialog = true },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(32.dp)
+                    .padding(32.dp),
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add supplier")
+                Icon(Icons.Filled.Add, contentDescription = "Add product")
             }
 
-            if (saveSupplier is ViewModelState.Result) {
+            if (saveProduct is ViewModelState.Result) {
                 showAddDialog = false
-                editSupplier = null
-                viewModel.resetSaveSupplierState()
+                editProduct = null
+                viewModel.resetSaveProductState()
             }
 
-            if (showAddDialog || editSupplier != null) {
-                AddEditSupplier(
-                    supplier = editSupplier,
-                    saveState = saveSupplier,
+            if (showAddDialog || editProduct != null) {
+                AddEditProduct(
+                    product = editProduct,
+                    suppliersList = suppliersList as ViewModelState.Result,
+                    saveState = saveProduct,
                     onDismiss = {
                         showAddDialog = false
-                        editSupplier = null
-                        viewModel.resetSaveSupplierState()
+                        editProduct = null
+                        viewModel.resetSaveProductState()
                     },
-                    onConfirm = {
-                        viewModel.saveSupplier(it)
-                    }
+                    onConfirm = { viewModel.saveProduct(it) },
                 )
             }
         }
@@ -120,13 +112,15 @@ fun SuppliersScreen(
 }
 
 @Composable
-private fun SearchBar(searchQuery: String, onSearchChange: (String) -> Unit) {
-    Log.d("SuppliersScreen", "SearchBar: ")
+private fun SearchBar(
+    searchQuery: String,
+    onSearchChange: (String) -> Unit,
+) {
     OutlinedTextField(
         value = searchQuery,
         onValueChange = onSearchChange,
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(stringResource(id = R.string.supplier_search_hint)) },
+        placeholder = { Text(stringResource(id = R.string.product_search_hint)) },
         leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
         trailingIcon = {
             if (searchQuery.isNotEmpty()) {
@@ -135,6 +129,7 @@ private fun SearchBar(searchQuery: String, onSearchChange: (String) -> Unit) {
                 }
             }
         },
-        singleLine = true
+        singleLine = true,
     )
 }
+
