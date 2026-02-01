@@ -15,9 +15,8 @@ class LoginRepositoryImpl @Inject constructor(
         if (user.username != "admin" || user.password != "admin") {
             return null
         }
-        val entity = user.toEntity()
-        userDao.loginUser(entity)
-        return entity
+        val id = userDao.loginUser(user.toEntity())
+        return userDao.getUserById(id)
     }
 
     override suspend fun checkLogin(): Boolean {

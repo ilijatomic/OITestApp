@@ -1,6 +1,5 @@
 package com.example.iotestapp.ui.navigation
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,27 +32,35 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.iotestapp.R
+import com.example.iotestapp.ui.common.HorizontalSpacerLarge
 import com.example.iotestapp.ui.dashboard.DashboardScreen
 import com.example.iotestapp.ui.login.LoginScreen
+import com.example.iotestapp.ui.suppliers.SuppliersScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavHost() {
+fun AppNavHost() {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val isLoginScreen = currentRoute == Routes.LOGIN
+    val isLoginScreen = currentRoute == Screen.Login.route
+    val screenTitle = when (currentRoute) {
+        Screen.Suppliers.route -> Screen.Suppliers.title
+        else -> R.string.app_name
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -68,7 +75,7 @@ fun NavHost() {
                     CenterAlignedTopAppBar(
                         title = {
                             Text(
-                                text = "IOTestApp",
+                                text = stringResource(screenTitle),
                                 style = MaterialTheme.typography.titleLarge
                             )
                         },
@@ -86,18 +93,21 @@ fun NavHost() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Routes.LOGIN,
+                startDestination = Screen.Login.route,
                 modifier = Modifier.padding(innerPadding)
             ) {
-                composable(Routes.LOGIN) {
+                composable(Screen.Login.route) {
                     LoginScreen {
-                        navController.navigate(Routes.DASHBOARD) {
-                            popUpTo(Routes.LOGIN) { inclusive = true }
+                        navController.navigate(Screen.Dashboard.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
                         }
                     }
                 }
-                composable(Routes.DASHBOARD) {
+                composable(Screen.Dashboard.route) {
                     DashboardScreen()
+                }
+                composable(Screen.Suppliers.route) {
+                    SuppliersScreen()
                 }
             }
         }
@@ -114,47 +124,29 @@ fun AppDrawerContent(
     val currentRoute = navBackStackEntry?.destination?.route
 
     ModalDrawerSheet {
-        // 1. Header Section
-        DrawerHeader(email = "user@example.com") // Replace with actual user data
+        DrawerHeader(email = "user@example.com")
 
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-        // 2. Navigation Items
-        NavigationDrawerItem(
-            label = { Text(text = "Dashboard") },
-//                icon = { Icon(screen.icon, contentDescription = null) },
-            selected = currentRoute == Routes.DASHBOARD,
-            onClick = {
-                scope.launch { drawerState.close() }
-                if (currentRoute != Routes.DASHBOARD) {
-                    navController.navigate(Routes.DASHBOARD) {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
+        drawerItems.forEach {
+            NavigationDrawerItem(
+                label = { Text(stringResource(it.title)) },
+                icon = { Icon(it.icon, contentDescription = null) },
+                selected = currentRoute == it.route,
+                onClick = {
+                    scope.launch { drawerState.close() }
+                    if (currentRoute != it.route) {
+                        navController.navigate(it.route) {
+                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
-                }
 
-            },
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-        )
-
-        Spacer(modifier = Modifier.weight(1.0f)) // Pushes Logout to the bottom
-
-//        // 3. Footer / Logout Section
-//        NavigationDrawerItem(
-//            label = { Text("Logout") },
-//            icon = { Icon(Icons.Default.ExitToApp, contentDescription = null) },
-//            selected = false,
-//            onClick = {
-//                scope.launch { drawerState.close() }
-//                // Use popUpTo(0) to clear the entire backstack
-//                navController.navigate(Screen.Login.route) {
-//                    popUpTo(0) { inclusive = true }
-//                }
-//            },
-//            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-//        )
-//        Spacer(modifier = Modifier.height(12.dp))
+                },
+                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+            )
+        }
     }
 }
 
@@ -165,7 +157,6 @@ fun DrawerHeader(email: String) {
             .fillMaxWidth()
             .padding(vertical = 24.dp, horizontal = 16.dp)
     ) {
-        // Simple Profile Icon
         Box(
             modifier = Modifier
                 .size(64.dp)
@@ -179,9 +170,8 @@ fun DrawerHeader(email: String) {
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        HorizontalSpacerLarge()
 
-        // User Email Text
         Text(
             text = email,
             style = MaterialTheme.typography.titleMedium,

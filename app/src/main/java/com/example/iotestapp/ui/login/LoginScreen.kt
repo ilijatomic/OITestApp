@@ -3,9 +3,7 @@ package com.example.iotestapp.ui.login
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -25,7 +23,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.iotestapp.R
-import kotlin.math.log
+import com.example.iotestapp.ui.common.HorizontalSpacerLarge
+import com.example.iotestapp.ui.common.HorizontalSpacerMedium
+import com.example.iotestapp.ui.common.ViewModelState
 
 @Composable
 fun LoginScreen(
@@ -48,7 +48,7 @@ fun LoginScreen(
                 CircularProgressIndicator()
             }
 
-            is LoginViewModel.State.Success -> {
+            is ViewModelState.Result -> {
                 Log.d("ilija", "success")
                 onLoginSuccess()
             }
@@ -58,30 +58,28 @@ fun LoginScreen(
                     value = username,
                     onValueChange = { username = it },
                     label = { Text(stringResource(R.string.username)) },
-                    enabled = loginState !is LoginViewModel.State.Loading
+                    enabled = loginState !is ViewModelState.Loading
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                HorizontalSpacerMedium()
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
                     label = { Text(stringResource(R.string.password)) },
                     visualTransformation = PasswordVisualTransformation(),
-                    enabled = loginState !is LoginViewModel.State.Loading
+                    enabled = loginState !is ViewModelState.Loading
                 )
-                if (loginState is LoginViewModel.State.Error) {
-                    (loginState as LoginViewModel.State.Error).id?.let {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = stringResource(it),
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
+                (loginState as? ViewModelState.Error)?.id?.let {
+                    HorizontalSpacerMedium()
+                    Text(
+                        text = stringResource(it),
+                        color = MaterialTheme.colorScheme.error
+                    )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                HorizontalSpacerLarge()
                 Button(
                     onClick = { viewModel.loginUser(username, password) }
                 ) {
-                    if (loginState is LoginViewModel.State.Loading) {
+                    if (loginState is ViewModelState.Loading) {
                         CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
                     } else {
                         Text(stringResource(R.string.login))

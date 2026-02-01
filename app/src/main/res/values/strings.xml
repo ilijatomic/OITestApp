@@ -4,7 +4,24 @@
     <string name="login">Login</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="dashboard">Home</string>
+    <string name="suppliers">Suppliers</string>
+    <string name="logout">Logout</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+
+    <string name="name">Name</string>
+    <string name="contact_person">Contact person</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
+    <string name="address">Address</string>
 
     <string name="login_error_username_empty">Username and password cannot be empty.</string>
     <string name="login_error_username_incorrect">Incorrect username or password.</string>
+
+    <string name="supplier_search_hint">Search supplier…</string>
+    <string name="supplier_empty">No supplier found.</string>
+    <string name="supplier_error_save">Unable to save supplier.</string>
+    <string name="supplier_add">Add supplier</string>
+    <string name="supplier_edit">Edit supplier</string>
 </resources>

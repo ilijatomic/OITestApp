@@ -1,18 +1,18 @@
 package com.example.iotestapp.domain.usecase.login
 
+import android.content.res.Resources
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.repo.LoginRepository
 import javax.inject.Inject
 
-class LogoutUseCase @Inject constructor(
+class CheckLoggedInUseCase @Inject constructor(
     private val loginRepository: LoginRepository
 ){
-    suspend operator fun invoke() : Resource<Unit> {
-        try {
-            loginRepository.logout()
-            return Resource.Success(Unit)
+    suspend operator fun invoke() : Resource<Boolean> {
+        return try {
+            Resource.Success(loginRepository.checkLogin())
         } catch (e: Exception) {
-            return Resource.Error(message = e.message.toString())
+            Resource.Error(message = e.message.toString())
         }
     }
 }

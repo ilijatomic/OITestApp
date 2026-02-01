@@ -21,7 +21,7 @@ class LoginUseCase @Inject constructor(
             }
             return Resource.Error(R.string.login_error_username_incorrect)
         } catch (e: Exception) {
-            return Resource.Exception(e.message.toString())
+            return Resource.Error(message = e.message.toString())
         }
     }
 }
