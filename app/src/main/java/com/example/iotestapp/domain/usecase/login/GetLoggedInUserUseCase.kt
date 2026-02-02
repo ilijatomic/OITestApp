@@ -5,7 +5,7 @@ import com.example.iotestapp.domain.model.User
 import com.example.iotestapp.domain.repo.LoginRepository
 import javax.inject.Inject
 
-class CheckLoggedInUseCase @Inject constructor(
+class GetLoggedInUserUseCase @Inject constructor(
     private val loginRepository: LoginRepository
 ){
     suspend operator fun invoke() : Resource<User?> {

@@ -24,4 +24,10 @@ sealed class Screen(
     object Logout: Screen("logout", R.string.logout, Icons.AutoMirrored.Filled.Logout)
 }
 
-val drawerItems = listOf(Screen.Dashboard, Screen.Products, Screen.Suppliers, Screen.Transactions)
+val drawerItems = listOf(
+    Screen.Dashboard,
+    Screen.Products,
+    Screen.Suppliers,
+    Screen.Transactions,
+    Screen.Logout
+)

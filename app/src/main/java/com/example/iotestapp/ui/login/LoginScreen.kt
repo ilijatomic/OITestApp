@@ -42,12 +42,12 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(MaterialTheme.dimen.loginPadding),
+            .padding(bottom = MaterialTheme.dimen.loginPaddingB),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         when (loginState) {
-            is LoginViewModel.State.Checking -> {
+            is LoginViewModel.LoginState.Checking -> {
                 CircularProgressIndicator()
             }
 
@@ -84,7 +84,8 @@ fun LoginScreen(
                 }
                 HorizontalSpacerLarge()
                 Button(
-                    onClick = { viewModel.loginUser(username, password) }
+                    onClick = { viewModel.loginUser(username, password) },
+                    enabled = loginState !is ViewModelState.Loading
                 ) {
                     if (loginState is ViewModelState.Loading) {
                         CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)

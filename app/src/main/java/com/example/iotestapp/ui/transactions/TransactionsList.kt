@@ -14,7 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
-import com.example.iotestapp.ui.common.rememberFormattedDate
+import com.example.iotestapp.ui.common.formattedDate
 import com.example.iotestapp.ui.theme.dimen
 import com.example.testapp.domain.model.Transaction
 
@@ -68,7 +68,7 @@ fun TransactionItem(
             )
             HorizontalSpacerSmall()
             Text(
-                text = rememberFormattedDate(transaction.date),
+                text = formattedDate(transaction.date),
                 style = MaterialTheme.typography.bodySmall,
             )
             transaction.notes?.let { notes ->

@@ -8,11 +8,10 @@ class LogoutUseCase @Inject constructor(
     private val loginRepository: LoginRepository
 ){
     suspend operator fun invoke() : Resource<Unit> {
-        try {
-            loginRepository.logout()
-            return Resource.Success(Unit)
+        return try {
+            Resource.Success(loginRepository.logout())
         } catch (e: Exception) {
-            return Resource.Error(message = e.message.toString())
+            Resource.Error(message = e.message.toString())
         }
     }
 }

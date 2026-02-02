@@ -3,6 +3,7 @@ package com.example.iotestapp.ui.navigation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,18 +28,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.iotestapp.R
+import com.example.iotestapp.domain.model.User
 import com.example.iotestapp.ui.common.HorizontalSpacerLarge
+import com.example.iotestapp.ui.common.ViewModelState
 import com.example.iotestapp.ui.dashboard.DashboardScreen
 import com.example.iotestapp.ui.login.LoginScreen
 import com.example.iotestapp.ui.products.ProductsScreen
@@ -127,22 +133,40 @@ fun AppDrawerContent(
     navController: NavController,
     drawerState: DrawerState,
     scope: CoroutineScope,
+    viewModel: NavigationViewModel = hiltViewModel()
 ) {
+    val loginUser by viewModel.loginUser.collectAsState()
+    val logoutUser by viewModel.logoutUser.collectAsState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    if (logoutUser is ViewModelState.Result) {
+        viewModel.resetLogoutState()
+        navController.navigate(Screen.Login.route) {
+            popUpTo(navController.graph.id) { inclusive = true }
+            launchSingleTop = true
+        }
+    }
+
     ModalDrawerSheet {
-        DrawerHeader(email = "user@example.com")
+        DrawerHeader(loginUser)
 
         HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimen.navDividerHeight))
 
         drawerItems.forEach {
+            if (it is Screen.Logout) {
+                Spacer(modifier = Modifier.weight(1F))
+            }
             NavigationDrawerItem(
                 label = { Text(stringResource(it.title)) },
                 icon = { Icon(it.icon, contentDescription = null) },
                 selected = currentRoute == it.route,
                 onClick = {
                     scope.launch { drawerState.close() }
+                    if (it is Screen.Logout) {
+                        viewModel.logoutUser()
+                        return@NavigationDrawerItem
+                    }
                     if (currentRoute != it.route) {
                         navController.navigate(it.route) {
                             popUpTo(navController.graph.id) { saveState = true }
@@ -159,7 +183,9 @@ fun AppDrawerContent(
 }
 
 @Composable
-fun DrawerHeader(email: String) {
+fun DrawerHeader(
+    userState: ViewModelState<User?>
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -183,10 +209,19 @@ fun DrawerHeader(email: String) {
 
         HorizontalSpacerLarge()
 
-        Text(
-            text = email,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+        when (userState) {
+            is ViewModelState.Loading -> {
+                CircularProgressIndicator()
+            }
+
+            is ViewModelState.Result -> {
+                Text(
+                    text = userState.data?.username ?: "",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+
     }
 }

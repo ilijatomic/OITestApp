@@ -13,7 +13,7 @@ data class Dimen(
     val navDrawerHeaderSize: Dp = 64.dp,
     val navDrawerHeaderPaddingV: Dp = 24.dp,
     val navDrawerHeaderPaddingH: Dp = 16.dp,
-    val loginPadding: Dp = 16.dp,
+    val loginPaddingB: Dp = 220.dp,
     val dashboardPadding: Dp = 16.dp,
     val supplierPadding: Dp = 16.dp,
     val supplierFabPadding: Dp = 32.dp,

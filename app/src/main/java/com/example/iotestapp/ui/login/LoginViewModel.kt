@@ -3,7 +3,7 @@ package com.example.iotestapp.ui.login
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.User
-import com.example.iotestapp.domain.usecase.login.CheckLoggedInUseCase
+import com.example.iotestapp.domain.usecase.login.GetLoggedInUserUseCase
 import com.example.iotestapp.domain.usecase.login.LoginUseCase
 import com.example.iotestapp.ui.common.BaseViewModel
 import com.example.iotestapp.ui.common.ViewModelState
@@ -17,13 +17,13 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val checkLoggedInUseCase: CheckLoggedInUseCase,
+    private val getLoggedInUserUseCase: GetLoggedInUserUseCase,
 ) : BaseViewModel() {
     companion object {
         const val TAG = "LoginViewModel"
     }
 
-    private val _loginState = MutableStateFlow<ViewModelState<User?>>(State.Checking)
+    private val _loginState = MutableStateFlow<ViewModelState<User?>>(LoginState.Checking)
     val loginState = _loginState.asStateFlow()
 
     init {
@@ -33,14 +33,15 @@ class LoginViewModel @Inject constructor(
     fun checkIfUserIsLoggedIn() {
         viewModelScope.launch {
             delay(2000) // simulating check user time
-            when (val result = checkLoggedInUseCase.invoke()) {
+            when (val result = getLoggedInUserUseCase.invoke()) {
                 is Resource.Success<*> -> {
                     result.data?.let {
                         _loginState.value = ViewModelState.Result(it)
-                    } ?: {
-                        _loginState.value = State.Idle
+                    } ?: run {
+                        _loginState.value = LoginState.Idle
                     }
                 }
+
                 is Resource.Error<*> -> postError(result, _loginState)
             }
         }
@@ -48,22 +49,20 @@ class LoginViewModel @Inject constructor(
 
     fun loginUser(username: String, password: String) {
         viewModelScope.launch {
-            viewModelScope.launch {
-                _loginState.value = ViewModelState.Loading
-                val result = loginUseCase.invoke(username, password)
-                delay(2000) // simulating login time
-                when (result) {
-                    is Resource.Success<*> -> _loginState.value = ViewModelState.Result(result.data)
-                    is Resource.Error<*> -> postError(result, _loginState)
+            _loginState.value = ViewModelState.Loading
+            val result = loginUseCase.invoke(username, password)
+            delay(2000) // simulating login time
+            when (result) {
+                is Resource.Success<*> -> _loginState.value = ViewModelState.Result(result.data)
+                is Resource.Error<*> -> postError(result, _loginState)
 
-                }
             }
         }
     }
 
-    sealed class State : ViewModelState<User?>() {
-        data object Checking : State()
-        data object Idle : State()
+    sealed class LoginState : ViewModelState<User?>() {
+        data object Checking : LoginState()
+        data object Idle : LoginState()
     }
 }
 

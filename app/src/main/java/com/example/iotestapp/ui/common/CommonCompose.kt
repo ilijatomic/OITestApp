@@ -30,7 +30,7 @@ fun VerticalSpacerMedium() = Spacer(modifier = Modifier.width(8.dp))
 fun VerticalSpacerLarge() = Spacer(modifier = Modifier.width(12.dp))
 
 @Composable
-fun rememberFormattedDate(epochMillis: Long): String {
+fun formattedDate(epochMillis: Long): String {
     val formatter = remember(epochMillis) { SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()) }
     return formatter.format(Date(epochMillis))
 }
