@@ -13,11 +13,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import com.example.iotestapp.R
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
 import com.example.iotestapp.ui.common.rememberFormattedDate
+import com.example.iotestapp.ui.theme.dimen
 import com.example.testapp.domain.model.Transaction
 
 @Composable
@@ -32,13 +30,13 @@ fun TransactionsList(
         ) {
             Text(
                 text = emptyMessage,
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier.padding(MaterialTheme.dimen.transactionListEmptyPadding),
             )
         }
     } else {
         LazyColumn(
-            contentPadding = PaddingValues(bottom = 80.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(bottom = MaterialTheme.dimen.transactionListPaddingB),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimen.transactionListSpace),
         ) {
             items(items = transactions, key = { it.id ?: "${it.product.id}-${it.date}-${it.type}-${it.quantity}" }) {
                 TransactionItem(it)
@@ -56,7 +54,9 @@ fun TransactionItem(
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(
+            modifier = Modifier.padding(MaterialTheme.dimen.transactionListItemPadding)
+        ) {
             Text(
                 text = "${transaction.type} • ${transaction.quantity}",
                 style = MaterialTheme.typography.titleSmall,

@@ -2,7 +2,6 @@ package com.example.iotestapp.domain.usecase.login
 
 import com.example.iotestapp.R
 import com.example.iotestapp.domain.common.Resource
-import com.example.iotestapp.domain.mappers.toDomain
 import com.example.iotestapp.domain.model.User
 import com.example.iotestapp.domain.repo.LoginRepository
 import javax.inject.Inject

@@ -1,6 +1,5 @@
 package com.example.iotestapp.domain.usecase.login
 
-import android.content.res.Resources
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.User
 import com.example.iotestapp.domain.repo.LoginRepository

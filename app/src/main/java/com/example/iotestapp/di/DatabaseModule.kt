@@ -3,7 +3,6 @@ package com.example.iotestapp.di
 import android.content.Context
 import androidx.room.Room
 import com.example.iotestapp.data.local.AppDatabase
-import com.example.iotestapp.data.local.dao.UserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

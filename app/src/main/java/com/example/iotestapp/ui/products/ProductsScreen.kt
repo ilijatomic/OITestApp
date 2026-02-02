@@ -14,11 +14,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,12 +27,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Product
 import com.example.iotestapp.ui.common.HorizontalSpacerLarge
 import com.example.iotestapp.ui.common.ViewModelState
+import com.example.iotestapp.ui.theme.dimen
 
 @Composable
 fun ProductsScreen(
@@ -58,7 +58,7 @@ fun ProductsScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(MaterialTheme.dimen.productPadding),
             ) {
                 SearchBar(
                     searchQuery = searchQuery,
@@ -89,7 +89,7 @@ fun ProductsScreen(
                 onClick = { showAddDialog = true },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(32.dp),
+                    .padding(MaterialTheme.dimen.productFabPadding),
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add product")
             }

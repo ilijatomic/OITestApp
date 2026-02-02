@@ -1,0 +1,64 @@
+package com.example.iotestapp.ui.dashboard
+
+import android.util.Log
+import androidx.lifecycle.viewModelScope
+import com.example.iotestapp.domain.common.Resource
+import com.example.iotestapp.domain.model.Product
+import com.example.iotestapp.domain.usecase.dashboard.GetLowStockProductsUseCase
+import com.example.iotestapp.domain.usecase.dashboard.GetRecentTransactionsUseCase
+import com.example.iotestapp.ui.common.BaseViewModel
+import com.example.iotestapp.ui.common.ViewModelState
+import com.example.testapp.domain.model.Transaction
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class DashboardViewModel @Inject constructor(
+    private val getLowStockProductsUseCase: GetLowStockProductsUseCase,
+    private val getRecentTransactionsUseCase: GetRecentTransactionsUseCase,
+) : BaseViewModel() {
+
+    companion object {
+        const val TAG = "DashboardViewModel"
+        const val DEFAULT_LIMIT = 10
+    }
+
+    private val _lowStockProducts = MutableStateFlow<ViewModelState<List<Product>>>(ViewModelState.Loading)
+    val lowStockProducts = _lowStockProducts.asStateFlow()
+
+    private val _recentTransactions = MutableStateFlow<ViewModelState<List<Transaction>>>(ViewModelState.Loading)
+    val recentTransactions = _recentTransactions.asStateFlow()
+
+    init {
+        loadLowStockProducts()
+        loadRecentTransactions()
+    }
+
+    private fun loadLowStockProducts() {
+        Log.d(TAG, "loadLowStockProducts")
+        viewModelScope.launch {
+            _lowStockProducts.value = ViewModelState.Loading
+            when (val result = getLowStockProductsUseCase.invoke()) {
+                is Resource.Success<*> -> _lowStockProducts.value =
+                    ViewModelState.Result(result.data ?: emptyList())
+                is Resource.Error<*> -> postError(result, _lowStockProducts, TAG)
+            }
+        }
+    }
+
+    private fun loadRecentTransactions() {
+        Log.d(TAG, "loadRecentTransactions")
+        viewModelScope.launch {
+            _recentTransactions.value = ViewModelState.Loading
+            when (val result = getRecentTransactionsUseCase.invoke(DEFAULT_LIMIT)) {
+                is Resource.Success<*> -> _recentTransactions.value =
+                    ViewModelState.Result(result.data ?: emptyList())
+                is Resource.Error<*> -> postError(result, _recentTransactions, TAG)
+            }
+        }
+    }
+}
+

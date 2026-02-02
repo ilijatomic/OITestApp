@@ -1,10 +1,6 @@
 package com.example.iotestapp.ui.login
 
-import android.util.Log
-import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.iotestapp.R
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.User
 import com.example.iotestapp.domain.usecase.login.CheckLoggedInUseCase

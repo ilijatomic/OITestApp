@@ -10,17 +10,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Supplier
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
+import com.example.iotestapp.ui.theme.dimen
 
 @Composable
 fun SuppliersList(
@@ -35,11 +32,14 @@ fun SuppliersList(
         ) {
             Text(
                 emptyMessage,
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier.padding(MaterialTheme.dimen.supplierListEmptyPadding)
             )
         }
     } else {
-        LazyColumn(contentPadding = PaddingValues(bottom = 80.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        LazyColumn(
+            contentPadding = PaddingValues(bottom = MaterialTheme.dimen.supplierListPaddingB),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimen.supplierListSpace)
+        ) {
             items(items = suppliers, key = { it.id!! }) {
                 SupplierItem(
                     supplier = it,
@@ -66,7 +66,7 @@ fun SupplierItem(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(MaterialTheme.dimen.supplierListItemPadding),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(

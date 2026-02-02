@@ -23,12 +23,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.iotestapp.R
 import com.example.iotestapp.ui.common.HorizontalSpacerLarge
 import com.example.iotestapp.ui.common.HorizontalSpacerMedium
 import com.example.iotestapp.ui.common.ViewModelState
+import com.example.iotestapp.ui.theme.dimen
 
 @Composable
 fun LoginScreen(
@@ -42,7 +42,7 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(MaterialTheme.dimen.loginPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

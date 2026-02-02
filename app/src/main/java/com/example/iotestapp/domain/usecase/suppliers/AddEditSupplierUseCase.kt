@@ -5,7 +5,6 @@ import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.Supplier
 import com.example.iotestapp.domain.repo.SuppliersRepository
 import javax.inject.Inject
-import kotlin.text.isBlank
 
 class AddEditSupplierUseCase @Inject constructor(
     private val suppliersRepository: SuppliersRepository

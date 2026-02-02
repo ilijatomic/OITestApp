@@ -23,12 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Supplier
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
+import com.example.iotestapp.ui.common.VerticalSpacerSmall
 import com.example.iotestapp.ui.common.ViewModelState
+import com.example.iotestapp.ui.theme.dimen
 
 @Composable
 fun AddEditSupplier(
@@ -57,8 +58,8 @@ fun AddEditSupplier(
     val isSaving = saveState is ViewModelState.Loading
 
     Dialog(onDismissRequest = onDismiss) {
-        Surface(shape = RoundedCornerShape(16.dp)) {
-            Column(modifier = Modifier.padding(16.dp)) {
+        Surface(shape = RoundedCornerShape(MaterialTheme.dimen.supplierAddDialogShapeSize)) {
+            Column(modifier = Modifier.padding(MaterialTheme.dimen.supplierAddDialogPadding)) {
                 Text(
                     text = if (supplier == null) stringResource(R.string.supplier_add) else stringResource(R.string.supplier_edit)
                 )
@@ -110,7 +111,7 @@ fun AddEditSupplier(
                         color = MaterialTheme.colorScheme.error
                     )
                 }
-
+                VerticalSpacerSmall()
                 Row(modifier = Modifier.align(Alignment.End)) {
                     Button(
                         onClick = onDismiss,

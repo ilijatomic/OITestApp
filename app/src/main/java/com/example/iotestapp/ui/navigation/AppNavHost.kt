@@ -3,9 +3,7 @@ package com.example.iotestapp.ui.navigation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -33,7 +31,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -45,6 +42,7 @@ import com.example.iotestapp.ui.dashboard.DashboardScreen
 import com.example.iotestapp.ui.login.LoginScreen
 import com.example.iotestapp.ui.products.ProductsScreen
 import com.example.iotestapp.ui.suppliers.SuppliersScreen
+import com.example.iotestapp.ui.theme.dimen
 import com.example.iotestapp.ui.transactions.TransactionsScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -136,7 +134,7 @@ fun AppDrawerContent(
     ModalDrawerSheet {
         DrawerHeader(email = "user@example.com")
 
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+        HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimen.navDividerHeight))
 
         drawerItems.forEach {
             NavigationDrawerItem(
@@ -165,11 +163,14 @@ fun DrawerHeader(email: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 24.dp, horizontal = 16.dp)
+            .padding(
+                vertical = MaterialTheme.dimen.navDrawerHeaderPaddingV,
+                horizontal = MaterialTheme.dimen.navDrawerHeaderPaddingH
+            )
     ) {
         Box(
             modifier = Modifier
-                .size(64.dp)
+                .size(MaterialTheme.dimen.navDrawerHeaderSize)
                 .background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
             contentAlignment = Alignment.Center
         ) {

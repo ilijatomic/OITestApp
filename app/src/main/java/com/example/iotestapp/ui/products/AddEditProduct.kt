@@ -1,6 +1,5 @@
 package com.example.iotestapp.ui.products
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -28,13 +27,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Product
 import com.example.iotestapp.domain.model.Supplier
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
+import com.example.iotestapp.ui.common.VerticalSpacerSmall
 import com.example.iotestapp.ui.common.ViewModelState
+import com.example.iotestapp.ui.theme.dimen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,8 +71,8 @@ fun AddEditProduct(
     }
 
     Dialog(onDismissRequest = onDismiss) {
-        Surface(shape = RoundedCornerShape(16.dp)) {
-            Column(modifier = Modifier.padding(16.dp)) {
+        Surface(shape = RoundedCornerShape(MaterialTheme.dimen.productAddDialogShapeSize)) {
+            Column(modifier = Modifier.padding(MaterialTheme.dimen.productAddDialogPadding)) {
                 Text(
                     text = if (product == null) stringResource(R.string.product_add) else stringResource(R.string.product_edit),
                 )
@@ -183,7 +183,7 @@ fun AddEditProduct(
                         color = MaterialTheme.colorScheme.error
                     )
                 }
-
+                VerticalSpacerSmall()
                 Row(modifier = Modifier.align(Alignment.End)) {
                     Button(onClick = onDismiss, enabled = !isSaving) {
                         Text(stringResource(R.string.cancel))

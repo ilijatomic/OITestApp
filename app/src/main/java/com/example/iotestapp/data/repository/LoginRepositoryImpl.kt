@@ -1,7 +1,6 @@
 package com.example.iotestapp.data.repository
 
 import com.example.iotestapp.data.local.dao.UserDao
-import com.example.iotestapp.data.local.entity.UserEntity
 import com.example.iotestapp.domain.mappers.toDomain
 import com.example.iotestapp.domain.mappers.toEntity
 import com.example.iotestapp.domain.model.User

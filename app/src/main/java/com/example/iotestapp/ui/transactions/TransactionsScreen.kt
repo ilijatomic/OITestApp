@@ -25,7 +25,6 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -39,15 +38,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Product
 import com.example.iotestapp.ui.common.HorizontalSpacerLarge
-import com.example.iotestapp.ui.common.HorizontalSpacerMedium
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
 import com.example.iotestapp.ui.common.VerticalSpacerMedium
 import com.example.iotestapp.ui.common.ViewModelState
+import com.example.iotestapp.ui.theme.dimen
 import com.example.testapp.domain.model.Transaction
 import com.example.testapp.domain.model.TransactionType
 
@@ -75,7 +73,7 @@ fun TransactionsScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(MaterialTheme.dimen.transactionPadding),
             ) {
                 TransactionFilterSection(
                     productsList = productsList,
@@ -112,7 +110,7 @@ fun TransactionsScreen(
                 onClick = { showAddDialog = true },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(32.dp),
+                    .padding(MaterialTheme.dimen.transactionFabPadding),
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add transaction")
             }
@@ -159,7 +157,7 @@ private fun TransactionFilterSection(
                     true,
                     onClick = { filterExpanded = !filterExpanded }
                 )
-                .padding(16.dp),
+                .padding(MaterialTheme.dimen.transactionPadding),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(Icons.Default.FilterList, contentDescription = null)
@@ -177,7 +175,7 @@ private fun TransactionFilterSection(
 
         AnimatedVisibility(visible = filterExpanded) {
             Column(
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(MaterialTheme.dimen.transactionFilterPadding)
             ) {
                 val products = (productsList as? ViewModelState.Result<List<Product>>)?.data.orEmpty()
 

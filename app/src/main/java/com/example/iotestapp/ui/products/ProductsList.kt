@@ -1,6 +1,5 @@
 package com.example.iotestapp.ui.products
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,13 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Product
-import com.example.iotestapp.domain.model.Supplier
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
+import com.example.iotestapp.ui.theme.dimen
 
 @Composable
 fun ProductsList(
@@ -36,13 +32,13 @@ fun ProductsList(
         ) {
             Text(
                 text = emptyMessage,
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier.padding(MaterialTheme.dimen.productListEmptyPadding),
             )
         }
     } else {
         LazyColumn(
-            contentPadding = PaddingValues(bottom = 80.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(bottom = MaterialTheme.dimen.productListPaddingB),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimen.productListSpace),
         ) {
             items(items = products, key = { it.id ?: it.barcode }) { product ->
                 ProductItem(
@@ -68,7 +64,7 @@ fun ProductItem(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(MaterialTheme.dimen.productListItemPadding),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(

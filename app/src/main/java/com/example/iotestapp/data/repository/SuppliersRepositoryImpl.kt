@@ -1,14 +1,9 @@
 package com.example.iotestapp.data.repository
 
 import com.example.iotestapp.data.local.dao.SupplierDao
-import com.example.iotestapp.data.local.dao.UserDao
-import com.example.iotestapp.data.local.entity.SupplierEntity
-import com.example.iotestapp.data.local.entity.UserEntity
 import com.example.iotestapp.domain.mappers.toDomain
 import com.example.iotestapp.domain.mappers.toEntity
 import com.example.iotestapp.domain.model.Supplier
-import com.example.iotestapp.domain.model.User
-import com.example.iotestapp.domain.repo.LoginRepository
 import com.example.iotestapp.domain.repo.SuppliersRepository
 import javax.inject.Inject
 
