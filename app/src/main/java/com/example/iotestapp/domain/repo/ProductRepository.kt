@@ -7,5 +7,6 @@ interface ProductRepository {
     suspend fun getProductById(id: Long): Product?
     suspend fun getProductByBarcode(barcode: String): Product?
     suspend fun getAllProducts(): List<Product>
+    suspend fun getLowStockProducts(): List<Product>
 }
 

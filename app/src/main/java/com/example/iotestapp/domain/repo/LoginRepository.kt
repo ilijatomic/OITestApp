@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface LoginRepository {
     suspend fun login(user: User): User?
-    suspend fun checkLogin(): Boolean
+    suspend fun checkLogin(): User?
     suspend fun logout()
 }

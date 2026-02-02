@@ -7,6 +7,7 @@ import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Support
+import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.iotestapp.R
 
@@ -19,7 +20,8 @@ sealed class Screen(
     object Dashboard: Screen("dashboard", R.string.dashboard, Icons.Default.Home)
     object Products: Screen("products", R.string.product_title, Icons.Default.ShoppingCart)
     object Suppliers: Screen("suppliers", R.string.supplier_title, Icons.Default.Support)
+    object Transactions: Screen("transactions", R.string.transaction_title, Icons.Default.Receipt)
     object Logout: Screen("logout", R.string.logout, Icons.AutoMirrored.Filled.Logout)
 }
 
-val drawerItems = listOf(Screen.Dashboard, Screen.Products, Screen.Suppliers)
+val drawerItems = listOf(Screen.Dashboard, Screen.Products, Screen.Suppliers, Screen.Transactions)

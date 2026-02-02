@@ -45,6 +45,7 @@ import com.example.iotestapp.ui.dashboard.DashboardScreen
 import com.example.iotestapp.ui.login.LoginScreen
 import com.example.iotestapp.ui.products.ProductsScreen
 import com.example.iotestapp.ui.suppliers.SuppliersScreen
+import com.example.iotestapp.ui.transactions.TransactionsScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -60,6 +61,8 @@ fun AppNavHost() {
     val isLoginScreen = currentRoute == Screen.Login.route
     val screenTitle = when (currentRoute) {
         Screen.Suppliers.route -> Screen.Suppliers.title
+        Screen.Products.route -> Screen.Products.title
+        Screen.Transactions.route -> Screen.Transactions.title
         else -> R.string.app_name
     }
 
@@ -112,6 +115,9 @@ fun AppNavHost() {
                 }
                 composable(Screen.Suppliers.route) {
                     SuppliersScreen()
+                }
+                composable(Screen.Transactions.route) {
+                    TransactionsScreen()
                 }
             }
         }

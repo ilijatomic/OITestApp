@@ -127,25 +127,25 @@ fun AddEditProduct(
                     OutlinedTextField(
                         modifier = Modifier.menuAnchor(
                             type = ExposedDropdownMenuAnchorType.PrimaryNotEditable,
-                            enabled = !isSaving,
+                            enabled = !isSaving && suppliersList.data.isNotEmpty(),
                         ),
                         value = supplier?.name.orEmpty(),
                         onValueChange = {},
                         readOnly = true,
                         label = { Text(stringResource(R.string.supplier)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = supplierExpanded) },
-                        enabled = !isSaving
+                        enabled = !isSaving && suppliersList.data.isNotEmpty()
                     )
 
                     ExposedDropdownMenu(
                         expanded = supplierExpanded,
                         onDismissRequest = { supplierExpanded = false },
                     ) {
-                        suppliersList.data.forEach { s ->
+                        suppliersList.data.forEach {
                             DropdownMenuItem(
-                                text = { Text(s.name) },
+                                text = { Text(it.name) },
                                 onClick = {
-                                    supplier = s
+                                    supplier = it
                                     supplierExpanded = false
                                 },
                             )

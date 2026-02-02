@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.R
 import com.example.iotestapp.domain.common.Resource
+import com.example.iotestapp.domain.model.User
 import com.example.iotestapp.domain.usecase.login.CheckLoggedInUseCase
 import com.example.iotestapp.domain.usecase.login.LoginUseCase
 import com.example.iotestapp.ui.common.BaseViewModel
@@ -26,7 +27,7 @@ class LoginViewModel @Inject constructor(
         const val TAG = "LoginViewModel"
     }
 
-    private val _loginState = MutableStateFlow<ViewModelState<Unit>>(State.Checking)
+    private val _loginState = MutableStateFlow<ViewModelState<User?>>(State.Checking)
     val loginState = _loginState.asStateFlow()
 
     init {
@@ -38,9 +39,9 @@ class LoginViewModel @Inject constructor(
             delay(2000) // simulating check user time
             when (val result = checkLoggedInUseCase.invoke()) {
                 is Resource.Success<*> -> {
-                    if (result.data == true) {
-                        _loginState.value = ViewModelState.Result(Unit)
-                    } else {
+                    result.data?.let {
+                        _loginState.value = ViewModelState.Result(it)
+                    } ?: {
                         _loginState.value = State.Idle
                     }
                 }
@@ -56,7 +57,7 @@ class LoginViewModel @Inject constructor(
                 val result = loginUseCase.invoke(username, password)
                 delay(2000) // simulating login time
                 when (result) {
-                    is Resource.Success<*> -> _loginState.value = ViewModelState.Result(Unit)
+                    is Resource.Success<*> -> _loginState.value = ViewModelState.Result(result.data)
                     is Resource.Error<*> -> postError(result, _loginState)
 
                 }
@@ -64,7 +65,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    sealed class State : ViewModelState<Unit>() {
+    sealed class State : ViewModelState<User?>() {
         data object Checking : State()
         data object Idle : State()
     }

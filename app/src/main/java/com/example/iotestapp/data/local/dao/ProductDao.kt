@@ -18,13 +18,19 @@ interface ProductDao {
     @Query("SELECT * FROM products WHERE id = :id")
     suspend fun getProductById(id: Long): ProductEntity?
 
-    @Query("SELECT * FROM products WHERE barcode = :barcode LIMIT 1")
+    @Query("SELECT * FROM products WHERE barcode = :barcode")
     suspend fun getProductByBarcode(barcode: String): ProductEntity?
-
-    @Query("SELECT * FROM products WHERE supplierId = :supplierId ORDER BY name ASC")
-    suspend fun getProductsBySupplierId(supplierId: Long): List<ProductEntity>
 
     @Query("SELECT * FROM products ORDER BY name ASC")
     suspend fun getAllProducts(): List<ProductEntity>
+
+    @Query(
+        """
+        SELECT * FROM products
+        WHERE currentStockLevel < minimumStockLevel
+        ORDER BY (minimumStockLevel - currentStockLevel) DESC
+        """
+    )
+    suspend fun getLowStockProducts(): List<ProductEntity>
 }
 

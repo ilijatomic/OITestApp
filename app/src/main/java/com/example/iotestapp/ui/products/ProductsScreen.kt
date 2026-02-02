@@ -47,8 +47,14 @@ fun ProductsScreen(
     var showAddDialog by remember { mutableStateOf(false) }
     var editProduct by remember { mutableStateOf<Product?>(null) }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.fillMaxSize()) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -70,10 +76,10 @@ fun ProductsScreen(
                         }
                     }
                     is ViewModelState.Result -> {
-                        val data = (productsList as ViewModelState.Result<List<Product>>).data
                         ProductsList(
-                            products = data,
-                            onProductClick = { editProduct = it },
+                            (productsList as ViewModelState.Result<List<Product>>).data,
+                            stringResource(R.string.product_empty),
+                            { editProduct = it },
                         )
                     }
                 }

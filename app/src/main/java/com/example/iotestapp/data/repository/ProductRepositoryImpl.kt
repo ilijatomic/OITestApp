@@ -44,5 +44,15 @@ class ProductRepositoryImpl @Inject constructor(
             entity.toDomain(supplier)
         }
     }
+
+    override suspend fun getLowStockProducts(): List<Product> {
+        val supplierCache = mutableMapOf<Long, com.example.iotestapp.domain.model.Supplier?>()
+        return productDao.getLowStockProducts().mapNotNull { entity ->
+            val supplier = supplierCache.getOrPut(entity.supplierId) {
+                supplierDao.getSupplierById(entity.supplierId)?.toDomain()
+            } ?: return@mapNotNull null
+            entity.toDomain(supplier)
+        }
+    }
 }
 

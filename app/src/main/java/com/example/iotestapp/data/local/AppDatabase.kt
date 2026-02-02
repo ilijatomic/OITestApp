@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.iotestapp.data.local.dao.ProductDao
 import com.example.iotestapp.data.local.dao.SupplierDao
+import com.example.iotestapp.data.local.dao.TransactionDao
 import com.example.iotestapp.data.local.dao.UserDao
 import com.example.iotestapp.data.local.entity.ProductEntity
 import com.example.iotestapp.data.local.entity.SupplierEntity
@@ -30,4 +31,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao() : UserDao
     abstract fun supplierDao() : SupplierDao
     abstract fun productDao(): ProductDao
+    abstract fun transactionDao(): TransactionDao
 }

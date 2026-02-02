@@ -9,6 +9,7 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="invalid_input">Invalid input</string>
+    <string name="all">All</string>
 
     <string name="name">Name</string>
     <string name="contact_person">Contact person</string>
@@ -38,6 +39,21 @@
     <string name="product_empty">No product found.</string>
     <string name="product_add">Add product</string>
     <string name="product_edit">Edit product</string>
-    <string name="supplier_id">Supplier ID</string>
     <string name="product_error_save">Unable to save product.</string>
+
+    <string name="transaction_error_save">Unable to save transaction.</string>
+    <string name="transaction_title">Transactions</string>
+    <string name="transaction_add">Add transaction</string>
+    <string name="transaction_type">Type</string>
+    <string name="transaction_quantity">Quantity</string>
+    <string name="transaction_notes">Notes</string>
+    <string name="transaction_filter">Filter</string>
+    <string name="transaction_filter_type">Filter by type</string>
+    <string name="transaction_filter_product">Filter by product</string>
+    <string name="transaction_empty">No transactions found.</string>
+
+    <string name="dashboard_low_stock_title">Low stock products</string>
+    <string name="dashboard_low_stock_empty">No low stock products.</string>
+    <string name="dashboard_recent_transactions_title">Recent transactions</string>
+    <string name="dashboard_recent_transactions_empty">No recent transactions.</string>
 </resources>

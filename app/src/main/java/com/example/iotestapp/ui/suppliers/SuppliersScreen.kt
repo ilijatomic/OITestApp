@@ -77,9 +77,9 @@ fun SuppliersScreen(
                     }
 
                     is ViewModelState.Result -> {
-                        val data = (suppliersList as ViewModelState.Result<List<Supplier>>).data
                         SuppliersList(
-                            data,
+                            (suppliersList as ViewModelState.Result<List<Supplier>>).data,
+                            stringResource(R.string.supplier_empty),
                             { editSupplier = it }
                         )
                     }

@@ -6,7 +6,7 @@ import com.example.iotestapp.domain.model.Product
  * Domain model representing an inventory transaction (restock or sale).
  */
 data class Transaction(
-    val id: Long,
+    val id: Long? = null,
     /** Epoch milliseconds (e.g. System.currentTimeMillis()). */
     val date: Long,
     val type: TransactionType,

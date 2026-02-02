@@ -1,5 +1,6 @@
 package com.example.iotestapp.ui.products
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import com.example.iotestapp.ui.common.HorizontalSpacerSmall
 @Composable
 fun ProductsList(
     products: List<Product>,
+    emptyMessage: String,
     onProductClick: (Product) -> Unit,
 ) {
     if (products.isEmpty()) {
@@ -33,7 +35,7 @@ fun ProductsList(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         ) {
             Text(
-                text = stringResource(id = R.string.product_empty),
+                text = emptyMessage,
                 modifier = Modifier.padding(24.dp),
             )
         }
@@ -102,7 +104,12 @@ fun ProductItem(
             HorizontalSpacerSmall()
             Text(
                 text = product.currentStockLevel.toString(),
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                color = if (product.currentStockLevel < product.minimumStockLevel) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
             )
             HorizontalSpacerSmall()
             Text(

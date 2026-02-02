@@ -25,6 +25,7 @@ import com.example.iotestapp.ui.common.HorizontalSpacerSmall
 @Composable
 fun SuppliersList(
     suppliers: List<Supplier>,
+    emptyMessage: String,
     onSupplierClick: (Supplier) -> Unit
 ) {
     if (suppliers.isEmpty()) {
@@ -32,7 +33,10 @@ fun SuppliersList(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
         ) {
-            Text(text = stringResource(id = R.string.supplier_empty), modifier = Modifier.padding(24.dp))
+            Text(
+                emptyMessage,
+                modifier = Modifier.padding(24.dp)
+            )
         }
     } else {
         LazyColumn(contentPadding = PaddingValues(bottom = 80.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
