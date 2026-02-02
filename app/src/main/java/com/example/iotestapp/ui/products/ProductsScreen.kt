@@ -1,6 +1,5 @@
 package com.example.iotestapp.ui.products
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,11 +37,10 @@ import com.example.iotestapp.ui.theme.dimen
 fun ProductsScreen(
     viewModel: ProductsViewModel = hiltViewModel(),
 ) {
-    Log.d("ProductsScreen", "ProductsScreen")
     var searchQuery by remember { mutableStateOf("") }
-    val productsList by viewModel.productsList.collectAsState()
-    val suppliersList by viewModel.suppliersList.collectAsState()
-    val saveProduct by viewModel.saveProduct.collectAsState()
+    val productsList by viewModel.productsState.collectAsState()
+    val suppliersList by viewModel.suppliersState.collectAsState()
+    val saveProduct by viewModel.saveProductState.collectAsState()
 
     var showAddDialog by remember { mutableStateOf(false) }
     var editProduct by remember { mutableStateOf<Product?>(null) }

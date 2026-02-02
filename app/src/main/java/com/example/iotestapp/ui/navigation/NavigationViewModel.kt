@@ -22,11 +22,11 @@ class NavigationViewModel @Inject constructor(
         const val TAG = "NavigationViewModel"
     }
 
-    private val _loginUser = MutableStateFlow<ViewModelState<User?>>(ViewModelState.Loading)
-    val loginUser = _loginUser.asStateFlow()
+    private val _loginState = MutableStateFlow<ViewModelState<User?>>(ViewModelState.Loading)
+    val loginState = _loginState.asStateFlow()
 
-    private val _logoutUser = MutableStateFlow<ViewModelState<Boolean>>(LogoutState.Idle)
-    val logoutUser = _logoutUser.asStateFlow()
+    private val _logoutState = MutableStateFlow<ViewModelState<Boolean>>(LogoutState.Idle)
+    val logoutState = _logoutState.asStateFlow()
 
     init {
         getLoggedInUser()
@@ -36,31 +36,31 @@ class NavigationViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = getLoggedInUserUseCase.invoke()) {
                 is Resource.Success<*> -> {
-                    _loginUser.value = ViewModelState.Result(result.data)
-                    _logoutUser.value = LogoutState.Idle
+                    _loginState.value = ViewModelState.Result(result.data)
+                    _logoutState.value = LogoutState.Idle
                 }
-                is Resource.Error<*> -> postError(result, _loginUser)
+                is Resource.Error<*> -> postError(result, _loginState)
             }
         }
     }
 
     fun logoutUser() {
         viewModelScope.launch {
-            _logoutUser.value = ViewModelState.Loading
+            _logoutState.value = ViewModelState.Loading
             val result = logoutUseCase.invoke()
             when (result) {
                 is Resource.Success<*> -> {
-                    _logoutUser.value = ViewModelState.Result(true)
-                    _loginUser.value = ViewModelState.Loading
+                    _logoutState.value = ViewModelState.Result(true)
+                    _loginState.value = ViewModelState.Loading
                 }
-                is Resource.Error<*> -> postError(result, _logoutUser)
+                is Resource.Error<*> -> postError(result, _logoutState)
 
             }
         }
     }
 
     fun resetLogoutState() {
-        _logoutUser.value = LogoutState.Idle
+        _logoutState.value = LogoutState.Idle
     }
 
     sealed class LogoutState : ViewModelState<Boolean>() {

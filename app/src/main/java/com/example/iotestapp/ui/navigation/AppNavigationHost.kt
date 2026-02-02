@@ -135,12 +135,12 @@ fun AppDrawerContent(
     scope: CoroutineScope,
     viewModel: NavigationViewModel = hiltViewModel()
 ) {
-    val loginUser by viewModel.loginUser.collectAsState()
-    val logoutUser by viewModel.logoutUser.collectAsState()
+    val loginState by viewModel.loginState.collectAsState()
+    val logoutState by viewModel.logoutState.collectAsState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    if (logoutUser is ViewModelState.Result) {
+    if (logoutState is ViewModelState.Result) {
         viewModel.resetLogoutState()
         navController.navigate(Screen.Login.route) {
             popUpTo(navController.graph.id) { inclusive = true }
@@ -149,7 +149,7 @@ fun AppDrawerContent(
     }
 
     ModalDrawerSheet {
-        DrawerHeader(loginUser)
+        DrawerHeader(loginState)
 
         HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimen.navDividerHeight))
 

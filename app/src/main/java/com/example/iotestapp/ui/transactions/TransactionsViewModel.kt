@@ -1,6 +1,5 @@
 package com.example.iotestapp.ui.transactions
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.Product
@@ -27,14 +26,14 @@ class TransactionsViewModel @Inject constructor(
         const val TAG = "TransactionsViewModel"
     }
 
-    private val _transactionsList = MutableStateFlow<ViewModelState<List<Transaction>>>(ViewModelState.Result(emptyList()))
-    val transactionsList = _transactionsList.asStateFlow()
+    private val _transactionsState = MutableStateFlow<ViewModelState<List<Transaction>>>(ViewModelState.Result(emptyList()))
+    val transactionsState = _transactionsState.asStateFlow()
 
     private val _saveTransactionState = MutableStateFlow<ViewModelState<Boolean>>(SaveTransactionState.Idle)
     val saveTransactionState = _saveTransactionState.asStateFlow()
 
-    private val _productsList = MutableStateFlow<ViewModelState<List<Product>>>(ViewModelState.Result(emptyList()))
-    val productsList = _productsList.asStateFlow()
+    private val _productsState = MutableStateFlow<ViewModelState<List<Product>>>(ViewModelState.Result(emptyList()))
+    val productsState = _productsState.asStateFlow()
 
     init {
         getTransactions()
@@ -42,13 +41,12 @@ class TransactionsViewModel @Inject constructor(
     }
 
     fun getTransactions() {
-        Log.d(TAG, "getTransactions")
         viewModelScope.launch {
-            _transactionsList.value = ViewModelState.Loading
+            _transactionsState.value = ViewModelState.Loading
             when (val result = getAllTransactionsUseCase.invoke()) {
-                is Resource.Success<*> -> _transactionsList.value =
+                is Resource.Success<*> -> _transactionsState.value =
                     ViewModelState.Result(result.data ?: emptyList())
-                is Resource.Error<*> -> postError(result, _transactionsList, TAG)
+                is Resource.Error<*> -> postError(result, _transactionsState, TAG)
             }
         }
     }
@@ -67,12 +65,11 @@ class TransactionsViewModel @Inject constructor(
     }
 
     fun getProducts() {
-        Log.d(TAG, "getProducts")
         viewModelScope.launch {
-            _productsList.value = ViewModelState.Loading
+            _productsState.value = ViewModelState.Loading
             when (val result = getAllProductsUseCase.invoke()) {
-                is Resource.Success<*> -> _productsList.value = ViewModelState.Result(result.data ?: emptyList())
-                is Resource.Error<*> -> postError(result, _productsList, TAG)
+                is Resource.Success<*> -> _productsState.value = ViewModelState.Result(result.data ?: emptyList())
+                is Resource.Error<*> -> postError(result, _productsState, TAG)
             }
         }
     }

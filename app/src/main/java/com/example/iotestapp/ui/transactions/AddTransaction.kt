@@ -31,7 +31,6 @@ import androidx.compose.ui.window.Dialog
 import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Product
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
-import com.example.iotestapp.ui.common.VerticalSpacerSmall
 import com.example.iotestapp.ui.common.ViewModelState
 import com.example.iotestapp.ui.theme.dimen
 import com.example.testapp.domain.model.Transaction
@@ -158,7 +157,7 @@ fun AddTransaction(
                         color = MaterialTheme.colorScheme.error
                     )
                 }
-                VerticalSpacerSmall()
+                HorizontalSpacerSmall()
                 Row(modifier = Modifier.align(Alignment.End)) {
                     Button(onClick = onDismiss, enabled = !isSaving) {
                         Text(stringResource(R.string.cancel))

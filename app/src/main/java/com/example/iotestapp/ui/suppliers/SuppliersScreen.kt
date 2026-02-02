@@ -1,6 +1,5 @@
 package com.example.iotestapp.ui.suppliers
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,10 +37,9 @@ import com.example.iotestapp.ui.theme.dimen
 fun SuppliersScreen(
     viewModel: SuppliersViewModel = hiltViewModel()
 ) {
-    Log.d("SuppliersScreen", "SuppliersScreen: ")
     var searchQuery by remember { mutableStateOf("") }
-    val suppliersList by viewModel.suppliersList.collectAsState()
-    val saveSupplier by viewModel.saveSupplier.collectAsState()
+    val suppliersState by viewModel.suppliersState.collectAsState()
+    val saveSupplierState by viewModel.saveSupplierState.collectAsState()
 
     var showAddDialog by remember { mutableStateOf(false) }
     var editSupplier by remember { mutableStateOf<Supplier?>(null) }
@@ -67,7 +65,7 @@ fun SuppliersScreen(
                     }
                 )
                 HorizontalSpacerLarge()
-                when (suppliersList) {
+                when (suppliersState) {
                     is ViewModelState.Loading -> {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             CircularProgressIndicator()
@@ -76,7 +74,7 @@ fun SuppliersScreen(
 
                     is ViewModelState.Result -> {
                         SuppliersList(
-                            (suppliersList as ViewModelState.Result<List<Supplier>>).data,
+                            (suppliersState as ViewModelState.Result<List<Supplier>>).data,
                             stringResource(R.string.supplier_empty),
                             { editSupplier = it }
                         )
@@ -93,7 +91,7 @@ fun SuppliersScreen(
                 Icon(Icons.Filled.Add, contentDescription = "Add supplier")
             }
 
-            if (saveSupplier is ViewModelState.Result) {
+            if (saveSupplierState is ViewModelState.Result) {
                 showAddDialog = false
                 editSupplier = null
                 viewModel.resetSaveSupplierState()
@@ -102,7 +100,7 @@ fun SuppliersScreen(
             if (showAddDialog || editSupplier != null) {
                 AddEditSupplier(
                     supplier = editSupplier,
-                    saveState = saveSupplier,
+                    saveState = saveSupplierState,
                     onDismiss = {
                         showAddDialog = false
                         editSupplier = null
@@ -119,7 +117,6 @@ fun SuppliersScreen(
 
 @Composable
 private fun SearchBar(searchQuery: String, onSearchChange: (String) -> Unit) {
-    Log.d("SuppliersScreen", "SearchBar: ")
     OutlinedTextField(
         value = searchQuery,
         onValueChange = onSearchChange,

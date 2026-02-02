@@ -1,6 +1,5 @@
 package com.example.iotestapp.ui.products
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.Product
@@ -27,14 +26,14 @@ class ProductsViewModel @Inject constructor(
         const val TAG = "ProductsViewModel"
     }
 
-    private val _productsList = MutableStateFlow<ViewModelState<List<Product>>>(ViewModelState.Result(emptyList()))
-    val productsList = _productsList.asStateFlow()
+    private val _productsState = MutableStateFlow<ViewModelState<List<Product>>>(ViewModelState.Result(emptyList()))
+    val productsState = _productsState.asStateFlow()
 
-    private val _saveProduct = MutableStateFlow<ViewModelState<Boolean>>(SaveProductState.Idle)
-    val saveProduct = _saveProduct.asStateFlow()
+    private val _saveProductState = MutableStateFlow<ViewModelState<Boolean>>(SaveProductState.Idle)
+    val saveProductState = _saveProductState.asStateFlow()
 
-    private val _suppliersList = MutableStateFlow<ViewModelState<List<Supplier>>>(ViewModelState.Result(emptyList()))
-    val suppliersList = _suppliersList.asStateFlow()
+    private val _suppliersState = MutableStateFlow<ViewModelState<List<Supplier>>>(ViewModelState.Result(emptyList()))
+    val suppliersState = _suppliersState.asStateFlow()
 
     private var fullList = emptyList<Product>()
     private var searchQuery = ""
@@ -45,21 +44,19 @@ class ProductsViewModel @Inject constructor(
     }
 
     fun getProducts() {
-        Log.d(TAG, "getProducts")
         viewModelScope.launch {
-            _productsList.value = ViewModelState.Loading
+            _productsState.value = ViewModelState.Loading
             when (val result = getAllProductsUseCase.invoke()) {
                 is Resource.Success<*> -> {
                     result.data?.let { fullList = it }
                     updateSearchQuery(searchQuery)
                 }
-                is Resource.Error<*> -> postError(result, _productsList, TAG)
+                is Resource.Error<*> -> postError(result, _productsState, TAG)
             }
         }
     }
 
     fun updateSearchQuery(query: String) {
-        Log.d(TAG, "updateSearchQuery: $query")
         searchQuery = query
         val filtered = if (searchQuery.isBlank()) fullList else fullList.filter {
                 it.name.contains(query, ignoreCase = true) ||
@@ -68,35 +65,34 @@ class ProductsViewModel @Inject constructor(
                 it.supplier.name.contains(query, ignoreCase = true)
         }
 
-        _productsList.value = ViewModelState.Result(filtered)
+        _productsState.value = ViewModelState.Result(filtered)
     }
 
     fun saveProduct(product: Product) {
         viewModelScope.launch {
-            _saveProduct.value = ViewModelState.Loading
+            _saveProductState.value = ViewModelState.Loading
             when (val result = addEditProductUseCase.invoke(product)) {
                 is Resource.Success<*> -> {
                     getProducts()
-                    _saveProduct.value = ViewModelState.Result(true)
+                    _saveProductState.value = ViewModelState.Result(true)
                 }
-                is Resource.Error<*> -> postError(result, _saveProduct, TAG)
+                is Resource.Error<*> -> postError(result, _saveProductState, TAG)
             }
         }
     }
 
     fun getSuppliers() {
-        Log.d(TAG, "getSuppliers")
         viewModelScope.launch {
-            _suppliersList.value = ViewModelState.Loading
+            _suppliersState.value = ViewModelState.Loading
             when (val result = getAllSuppliersUseCase.invoke()) {
-                is Resource.Success<*> -> _suppliersList.value = ViewModelState.Result(result.data ?: emptyList())
-                is Resource.Error<*> -> postError(result, _suppliersList, TAG)
+                is Resource.Success<*> -> _suppliersState.value = ViewModelState.Result(result.data ?: emptyList())
+                is Resource.Error<*> -> postError(result, _suppliersState, TAG)
             }
         }
     }
 
     fun resetSaveProductState() {
-        _saveProduct.value = SaveProductState.Idle
+        _saveProductState.value = SaveProductState.Idle
     }
 
     sealed class SaveProductState : ViewModelState<Boolean>() {

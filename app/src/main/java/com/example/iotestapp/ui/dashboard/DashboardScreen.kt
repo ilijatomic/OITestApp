@@ -17,8 +17,8 @@ import com.example.iotestapp.ui.theme.dimen
 fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
-    val lowStockState by viewModel.lowStockProducts.collectAsState()
-    val recentTxState by viewModel.recentTransactions.collectAsState()
+    val lowStockState by viewModel.lowStockProductsState.collectAsState()
+    val recentTransactionState by viewModel.recentTransactionsState.collectAsState()
 
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -32,7 +32,7 @@ fun DashboardScreen(
 
             item { HorizontalSpacerLarge() }
 
-            RecentTransactionsSection(state = recentTxState)
+            RecentTransactionsSection(state = recentTransactionState)
         }
     }
 }

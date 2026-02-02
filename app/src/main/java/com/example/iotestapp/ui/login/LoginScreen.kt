@@ -1,6 +1,5 @@
 package com.example.iotestapp.ui.login
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -52,7 +51,6 @@ fun LoginScreen(
             }
 
             is ViewModelState.Result -> {
-                Log.d("ilija", "success")
                 onLoginSuccess()
             }
 

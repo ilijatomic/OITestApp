@@ -53,9 +53,9 @@ import com.example.testapp.domain.model.TransactionType
 fun TransactionsScreen(
     viewModel: TransactionsViewModel = hiltViewModel(),
 ) {
-    val transactionsList by viewModel.transactionsList.collectAsState()
-    val productsList by viewModel.productsList.collectAsState()
-    val saveState by viewModel.saveTransactionState.collectAsState()
+    val transactionsState by viewModel.transactionsState.collectAsState()
+    val productsState by viewModel.productsState.collectAsState()
+    val saveTransactionState by viewModel.saveTransactionState.collectAsState()
 
     var showAddDialog by remember { mutableStateOf(false) }
 
@@ -76,7 +76,7 @@ fun TransactionsScreen(
                     .padding(MaterialTheme.dimen.transactionPadding),
             ) {
                 TransactionFilterSection(
-                    productsList = productsList,
+                    productsState = productsState,
                     selectedType = selectedType,
                     onSelectedTypeChange = { selectedType = it },
                     selectedProduct = selectedProduct,
@@ -85,7 +85,7 @@ fun TransactionsScreen(
 
                 HorizontalSpacerLarge()
 
-                when (transactionsList) {
+                when (transactionsState) {
                     is ViewModelState.Loading -> {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             CircularProgressIndicator()
@@ -93,7 +93,7 @@ fun TransactionsScreen(
                     }
 
                     is ViewModelState.Result -> {
-                        val filtered = (transactionsList as ViewModelState.Result<List<Transaction>>).data
+                        val filtered = (transactionsState as ViewModelState.Result<List<Transaction>>).data
                             .asSequence()
                             .filter { tx -> selectedType == null || tx.type == selectedType }
                             .filter { tx -> selectedProduct == null || tx.product.id == selectedProduct?.id }
@@ -114,15 +114,15 @@ fun TransactionsScreen(
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add transaction")
             }
-            if (saveState is ViewModelState.Result) {
+            if (saveTransactionState is ViewModelState.Result) {
                 showAddDialog = false
                 viewModel.resetSaveTransactionState()
             }
 
             if (showAddDialog) {
                 AddTransaction(
-                    productsList = productsList as ViewModelState.Result,
-                    saveState = saveState,
+                    productsList = productsState as ViewModelState.Result,
+                    saveState = saveTransactionState,
                     onDismiss = {
                         showAddDialog = false
                         viewModel.resetSaveTransactionState()
@@ -136,7 +136,7 @@ fun TransactionsScreen(
 
 @Composable
 private fun TransactionFilterSection(
-    productsList: ViewModelState<List<Product>>,
+    productsState: ViewModelState<List<Product>>,
     selectedType: TransactionType?,
     onSelectedTypeChange: (TransactionType?) -> Unit,
     selectedProduct: Product?,
@@ -177,7 +177,7 @@ private fun TransactionFilterSection(
             Column(
                 modifier = Modifier.padding(MaterialTheme.dimen.transactionFilterPadding)
             ) {
-                val products = (productsList as? ViewModelState.Result<List<Product>>)?.data.orEmpty()
+                val products = (productsState as? ViewModelState.Result<List<Product>>)?.data.orEmpty()
 
                 ExposedDropdownMenuBox(
                     expanded = typeExpanded,

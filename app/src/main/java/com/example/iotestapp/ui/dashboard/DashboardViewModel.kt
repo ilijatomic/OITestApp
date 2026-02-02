@@ -1,6 +1,5 @@
 package com.example.iotestapp.ui.dashboard
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.Product
@@ -26,11 +25,11 @@ class DashboardViewModel @Inject constructor(
         const val DEFAULT_LIMIT = 10
     }
 
-    private val _lowStockProducts = MutableStateFlow<ViewModelState<List<Product>>>(ViewModelState.Loading)
-    val lowStockProducts = _lowStockProducts.asStateFlow()
+    private val _lowStockProductsState = MutableStateFlow<ViewModelState<List<Product>>>(ViewModelState.Loading)
+    val lowStockProductsState = _lowStockProductsState.asStateFlow()
 
-    private val _recentTransactions = MutableStateFlow<ViewModelState<List<Transaction>>>(ViewModelState.Loading)
-    val recentTransactions = _recentTransactions.asStateFlow()
+    private val _recentTransactionsState = MutableStateFlow<ViewModelState<List<Transaction>>>(ViewModelState.Loading)
+    val recentTransactionsState = _recentTransactionsState.asStateFlow()
 
     init {
         loadLowStockProducts()
@@ -38,25 +37,23 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun loadLowStockProducts() {
-        Log.d(TAG, "loadLowStockProducts")
         viewModelScope.launch {
-            _lowStockProducts.value = ViewModelState.Loading
+            _lowStockProductsState.value = ViewModelState.Loading
             when (val result = getLowStockProductsUseCase.invoke()) {
-                is Resource.Success<*> -> _lowStockProducts.value =
+                is Resource.Success<*> -> _lowStockProductsState.value =
                     ViewModelState.Result(result.data ?: emptyList())
-                is Resource.Error<*> -> postError(result, _lowStockProducts, TAG)
+                is Resource.Error<*> -> postError(result, _lowStockProductsState, TAG)
             }
         }
     }
 
     private fun loadRecentTransactions() {
-        Log.d(TAG, "loadRecentTransactions")
         viewModelScope.launch {
-            _recentTransactions.value = ViewModelState.Loading
+            _recentTransactionsState.value = ViewModelState.Loading
             when (val result = getRecentTransactionsUseCase.invoke(DEFAULT_LIMIT)) {
-                is Resource.Success<*> -> _recentTransactions.value =
+                is Resource.Success<*> -> _recentTransactionsState.value =
                     ViewModelState.Result(result.data ?: emptyList())
-                is Resource.Error<*> -> postError(result, _recentTransactions, TAG)
+                is Resource.Error<*> -> postError(result, _recentTransactionsState, TAG)
             }
         }
     }

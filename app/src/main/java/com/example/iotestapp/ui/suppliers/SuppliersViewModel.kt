@@ -1,6 +1,5 @@
 package com.example.iotestapp.ui.suppliers
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.Supplier
@@ -23,11 +22,11 @@ class SuppliersViewModel @Inject constructor(
         const val TAG = "SuppliersViewModel"
     }
 
-    private val _suppliersList = MutableStateFlow<ViewModelState<List<Supplier>>>(ViewModelState.Result(emptyList()))
-    val suppliersList = _suppliersList.asStateFlow()
+    private val _suppliersState = MutableStateFlow<ViewModelState<List<Supplier>>>(ViewModelState.Result(emptyList()))
+    val suppliersState = _suppliersState.asStateFlow()
 
-    private val _saveSupplier = MutableStateFlow<ViewModelState<Boolean>>(SaveSupplierState.Idle)
-    val saveSupplier = _saveSupplier.asStateFlow()
+    private val _saveSupplierState = MutableStateFlow<ViewModelState<Boolean>>(SaveSupplierState.Idle)
+    val saveSupplierState = _saveSupplierState.asStateFlow()
 
     private var fullList = emptyList<Supplier>()
     private var searchQuery = ""
@@ -37,21 +36,19 @@ class SuppliersViewModel @Inject constructor(
     }
 
     fun getSuppliers() {
-        Log.d(TAG, "getSuppliers: ")
         viewModelScope.launch {
-            _suppliersList.value = ViewModelState.Loading
+            _suppliersState.value = ViewModelState.Loading
             when (val result = getAllSuppliersUseCase.invoke()) {
                 is Resource.Success<*> -> {
                     result.data?.let { fullList = it }
                     updateSearchQuery(searchQuery)
                 }
-                is Resource.Error<*> -> postError(result, _suppliersList, TAG)
+                is Resource.Error<*> -> postError(result, _suppliersState, TAG)
             }
         }
     }
 
     fun updateSearchQuery(query: String) {
-        Log.d(TAG, "updateSearchQuery: $query")
         searchQuery = query
         val filtered = if (searchQuery.isBlank()) fullList else fullList.filter {
             it.name.contains(query, ignoreCase = true) ||
@@ -59,24 +56,24 @@ class SuppliersViewModel @Inject constructor(
             it.email.contains(query, ignoreCase = true)
         }
 
-        _suppliersList.value = ViewModelState.Result(filtered)
+        _suppliersState.value = ViewModelState.Result(filtered)
     }
 
     fun saveSupplier(supplier: Supplier) {
         viewModelScope.launch {
-            _saveSupplier.value = ViewModelState.Loading
+            _saveSupplierState.value = ViewModelState.Loading
             when (val result = addEditSupplierUseCase.invoke(supplier)) {
                 is Resource.Success<*> -> {
-                    _saveSupplier.value = ViewModelState.Result(true)
+                    _saveSupplierState.value = ViewModelState.Result(true)
                     getSuppliers()
                 }
-                is Resource.Error<*> -> postError(result, _saveSupplier, TAG)
+                is Resource.Error<*> -> postError(result, _saveSupplierState, TAG)
             }
         }
     }
 
     fun resetSaveSupplierState() {
-        _saveSupplier.value = SaveSupplierState.Idle
+        _saveSupplierState.value = SaveSupplierState.Idle
     }
 
     sealed class SaveSupplierState : ViewModelState<Boolean>() {

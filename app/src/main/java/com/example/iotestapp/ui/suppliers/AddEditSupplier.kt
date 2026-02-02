@@ -1,6 +1,5 @@
 package com.example.iotestapp.ui.suppliers
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -27,7 +26,6 @@ import androidx.compose.ui.window.Dialog
 import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Supplier
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
-import com.example.iotestapp.ui.common.VerticalSpacerSmall
 import com.example.iotestapp.ui.common.ViewModelState
 import com.example.iotestapp.ui.theme.dimen
 
@@ -38,7 +36,6 @@ fun AddEditSupplier(
     onDismiss: () -> Unit,
     onConfirm: (Supplier) -> Unit
 ) {
-    Log.d("TAG", "AddEditSupplier: ")
     var name by remember { mutableStateOf(supplier?.name ?: "") }
     var contactPerson by remember { mutableStateOf(supplier?.contactPerson ?: "") }
     var phone by remember { mutableStateOf(supplier?.phone ?: "") }
@@ -111,7 +108,7 @@ fun AddEditSupplier(
                         color = MaterialTheme.colorScheme.error
                     )
                 }
-                VerticalSpacerSmall()
+                HorizontalSpacerSmall()
                 Row(modifier = Modifier.align(Alignment.End)) {
                     Button(
                         onClick = onDismiss,
