@@ -71,13 +71,6 @@ fun TransactionItem(
                 text = formattedDate(transaction.date),
                 style = MaterialTheme.typography.bodySmall,
             )
-            transaction.notes?.let { notes ->
-                HorizontalSpacerSmall()
-                Text(
-                    text = notes,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
         }
     }
 }

@@ -79,21 +79,6 @@ fun ProductItem(
             )
             HorizontalSpacerSmall()
             Text(
-                text = product.price.toString(),
-                style = MaterialTheme.typography.bodySmall
-            )
-            HorizontalSpacerSmall()
-            Text(
-                text = product.category,
-                style = MaterialTheme.typography.bodySmall
-            )
-            HorizontalSpacerSmall()
-            Text(
-                text = product.barcode,
-                style = MaterialTheme.typography.bodySmall
-            )
-            HorizontalSpacerSmall()
-            Text(
                 text = product.supplier.name,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -106,11 +91,6 @@ fun ProductItem(
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant
                 },
-            )
-            HorizontalSpacerSmall()
-            Text(
-                text = product.minimumStockLevel.toString(),
-                style = MaterialTheme.typography.bodySmall
             )
         }
     }

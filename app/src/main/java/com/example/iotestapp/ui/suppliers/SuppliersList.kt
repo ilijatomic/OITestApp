@@ -81,16 +81,6 @@ fun SupplierItem(
             )
             HorizontalSpacerSmall()
             Text(
-                text = supplier.address,
-                style = MaterialTheme.typography.bodySmall,
-            )
-            HorizontalSpacerSmall()
-            Text(
-                text = supplier.email,
-                style = MaterialTheme.typography.bodySmall,
-            )
-            HorizontalSpacerSmall()
-            Text(
                 text = supplier.phone,
                 style = MaterialTheme.typography.bodySmall,
             )
