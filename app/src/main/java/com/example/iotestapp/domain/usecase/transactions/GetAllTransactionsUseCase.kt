@@ -5,6 +5,9 @@ import com.example.iotestapp.domain.repo.TransactionRepository
 import com.example.testapp.domain.model.Transaction
 import javax.inject.Inject
 
+/**
+ * Use case for getting list of transactions from DB
+ */
 class GetAllTransactionsUseCase @Inject constructor(
     private val transactionRepository: TransactionRepository,
 ) {

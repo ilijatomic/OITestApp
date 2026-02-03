@@ -1,5 +1,6 @@
 package com.example.iotestapp.ui.suppliers
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.Supplier
@@ -18,9 +19,6 @@ class SuppliersViewModel @Inject constructor(
     private val getAllSuppliersUseCase: GetAllSuppliersUseCase,
     private val addEditSupplierUseCase: AddEditSupplierUseCase,
 ) : BaseViewModel() {
-    companion object {
-        const val TAG = "SuppliersViewModel"
-    }
 
     private val _suppliersState = MutableStateFlow<ViewModelState<List<Supplier>>>(ViewModelState.Result(emptyList()))
     val suppliersState = _suppliersState.asStateFlow()
@@ -34,7 +32,9 @@ class SuppliersViewModel @Inject constructor(
     fun getSuppliers() {
         viewModelScope.launch {
             _suppliersState.value = ViewModelState.Loading
-            when (val result = getAllSuppliersUseCase.invoke()) {
+            val result = getAllSuppliersUseCase.invoke()
+            Log.d(TAG, "getSuppliers: $result")
+            when (result) {
                 is Resource.Success<*> -> {
                     result.data?.let { fullList = it }
                     updateSearchQuery(searchQuery)
@@ -51,14 +51,16 @@ class SuppliersViewModel @Inject constructor(
             it.contactPerson.contains(query, ignoreCase = true) ||
             it.email.contains(query, ignoreCase = true)
         }
-
+        Log.d(TAG, "updateSearchQuery: $filtered")
         _suppliersState.value = ViewModelState.Result(filtered)
     }
 
     fun saveSupplier(supplier: Supplier) {
         viewModelScope.launch {
             _saveSupplierState.value = ViewModelState.Loading
-            when (val result = addEditSupplierUseCase.invoke(supplier)) {
+            val result = addEditSupplierUseCase.invoke(supplier)
+            Log.d(TAG, "saveSupplier: $result")
+            when (result) {
                 is Resource.Success<*> -> {
                     _saveSupplierState.value = ViewModelState.Result(true)
                     getSuppliers()
@@ -69,6 +71,7 @@ class SuppliersViewModel @Inject constructor(
     }
 
     fun resetSaveSupplierState() {
+        Log.d(TAG, "resetSaveSupplierState: ")
         _saveSupplierState.value = SaveSupplierState.Idle
     }
 

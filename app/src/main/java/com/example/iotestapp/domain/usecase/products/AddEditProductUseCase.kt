@@ -6,6 +6,9 @@ import com.example.iotestapp.domain.model.Product
 import com.example.iotestapp.domain.repo.ProductRepository
 import javax.inject.Inject
 
+/**
+ * Use case for adding or editing product
+ */
 class AddEditProductUseCase @Inject constructor(
     private val productRepository: ProductRepository
 ) {
@@ -13,10 +16,10 @@ class AddEditProductUseCase @Inject constructor(
         return try {
             val hasInvalidInput =
                 product.name.isBlank() ||
-                    product.description.isBlank() ||
-                    product.category.isBlank() ||
-                    product.barcode.isBlank() ||
-                    (product.supplier.id == null || product.supplier.id <= 0)
+                product.description.isBlank() ||
+                product.category.isBlank() ||
+                product.barcode.isBlank() ||
+                (product.supplier.id == null || product.supplier.id <= 0)
 
             if (hasInvalidInput) {
                 return Resource.Error(R.string.invalid_input)

@@ -1,5 +1,6 @@
 package com.example.iotestapp.ui.navigation
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.User
@@ -19,9 +20,6 @@ class NavigationViewModel @Inject constructor(
     private val getLoginUserUseCase: GetLoginUserUseCase,
     private val logoutUseCase: LogoutUseCase,
 ) : BaseViewModel() {
-    companion object {
-        const val TAG = "NavigationViewModel"
-    }
 
     private val _navLoginState = MutableStateFlow<ViewModelState<User?>>(NavLoginState.Idle)
     val navLoginState = _navLoginState.asStateFlow()
@@ -31,7 +29,9 @@ class NavigationViewModel @Inject constructor(
 
     fun getLoggedInUser() {
         viewModelScope.launch {
-            when (val result = getLoginUserUseCase.invoke()) {
+            val result = getLoginUserUseCase.invoke()
+            Log.d(TAG, "getLoggedInUser: $result")
+            when (result) {
                 is Resource.Success<*> -> {
                     _navLoginState.value = ViewModelState.Result(result.data)
                     _navLogoutState.value = NavLogoutState.Idle
@@ -45,6 +45,7 @@ class NavigationViewModel @Inject constructor(
         viewModelScope.launch {
             _navLogoutState.value = ViewModelState.Loading
             val result = logoutUseCase.invoke()
+            Log.d(TAG, "logoutUser: $result")
             delay(2000) // Simulate delay for logout
             when (result) {
                 is Resource.Success<*> -> {
@@ -58,6 +59,7 @@ class NavigationViewModel @Inject constructor(
     }
 
     fun resetLogoutState() {
+        Log.d(TAG, "resetLogoutState: ")
         _navLogoutState.value = NavLogoutState.Idle
     }
 

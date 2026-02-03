@@ -1,5 +1,6 @@
 package com.example.iotestapp.ui.transactions
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.Product
@@ -22,10 +23,6 @@ class TransactionsViewModel @Inject constructor(
     private val getAllProductsUseCase: GetAllProductsUseCase,
 ) : BaseViewModel() {
 
-    companion object {
-        const val TAG = "TransactionsViewModel"
-    }
-
     private val _transactionsState = MutableStateFlow<ViewModelState<List<Transaction>>>(ViewModelState.Result(emptyList()))
     val transactionsState = _transactionsState.asStateFlow()
 
@@ -38,7 +35,9 @@ class TransactionsViewModel @Inject constructor(
     fun getTransactions() {
         viewModelScope.launch {
             _transactionsState.value = ViewModelState.Loading
-            when (val result = getAllTransactionsUseCase.invoke()) {
+            val result = getAllTransactionsUseCase.invoke()
+            Log.d(TAG, "getTransactions: $result")
+            when (result) {
                 is Resource.Success<*> -> _transactionsState.value =
                     ViewModelState.Result(result.data ?: emptyList())
                 is Resource.Error<*> -> postError(result, _transactionsState, TAG)
@@ -49,7 +48,9 @@ class TransactionsViewModel @Inject constructor(
     fun saveTransaction(transaction: Transaction) {
         viewModelScope.launch {
             _saveTransactionState.value = ViewModelState.Loading
-            when (val result = addTransactionUseCase.invoke(transaction)) {
+            val result = addTransactionUseCase.invoke(transaction)
+            Log.d(TAG, "saveTransaction: $result")
+            when (result) {
                 is Resource.Success<*> -> {
                     getTransactions()
                     result.data?.let {
@@ -64,7 +65,9 @@ class TransactionsViewModel @Inject constructor(
     fun getProducts() {
         viewModelScope.launch {
             _productsState.value = ViewModelState.Loading
-            when (val result = getAllProductsUseCase.invoke()) {
+            val result = getAllProductsUseCase.invoke()
+            Log.d(TAG, "getProducts: $result")
+            when (result) {
                 is Resource.Success<*> -> _productsState.value = ViewModelState.Result(result.data ?: emptyList())
                 is Resource.Error<*> -> postError(result, _productsState, TAG)
             }
@@ -72,6 +75,7 @@ class TransactionsViewModel @Inject constructor(
     }
 
     fun resetSaveTransactionState() {
+        Log.d(TAG, "resetSaveTransactionState: ")
         _saveTransactionState.value = SaveTransactionState.Idle
     }
 

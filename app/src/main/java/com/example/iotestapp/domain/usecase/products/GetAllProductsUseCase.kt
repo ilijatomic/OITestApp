@@ -5,6 +5,9 @@ import com.example.iotestapp.domain.model.Product
 import com.example.iotestapp.domain.repo.ProductRepository
 import javax.inject.Inject
 
+/**
+ * Use case for getting list of products from DB
+ */
 class GetAllProductsUseCase @Inject constructor(
     private val productRepository: ProductRepository
 ) {

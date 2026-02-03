@@ -6,6 +6,9 @@ import com.example.iotestapp.domain.model.Supplier
 import com.example.iotestapp.domain.repo.SuppliersRepository
 import javax.inject.Inject
 
+/**
+ * Use case for adding or editing supplier
+ */
 class AddEditSupplierUseCase @Inject constructor(
     private val suppliersRepository: SuppliersRepository
 ) {
@@ -13,10 +16,10 @@ class AddEditSupplierUseCase @Inject constructor(
         return try {
             val hasInvalidInput =
                 supplier.name.isBlank() ||
-                        supplier.contactPerson.isBlank() ||
-                        supplier.email.isBlank() ||
-                        supplier.phone.isBlank() ||
-                        supplier.address.isBlank()
+                supplier.contactPerson.isBlank() ||
+                supplier.email.isBlank() ||
+                supplier.phone.isBlank() ||
+                supplier.address.isBlank()
 
             if (hasInvalidInput) {
                 return Resource.Error(R.string.invalid_input)

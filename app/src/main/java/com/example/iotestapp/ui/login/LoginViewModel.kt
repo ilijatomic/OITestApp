@@ -1,5 +1,6 @@
 package com.example.iotestapp.ui.login
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.User
@@ -19,9 +20,6 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val getLoginUserUseCase: GetLoginUserUseCase,
 ) : BaseViewModel() {
-    companion object {
-        const val TAG = "LoginViewModel"
-    }
 
     private val _loginState = MutableStateFlow<ViewModelState<User?>>(LoginState.Checking)
     val loginState = _loginState.asStateFlow()
@@ -29,6 +27,7 @@ class LoginViewModel @Inject constructor(
     fun checkIfUserIsLoggedIn() {
         viewModelScope.launch {
             val result = getLoginUserUseCase.invoke()
+            Log.d(TAG, "checkIfUserIsLoggedIn: $result")
             delay(2000) // simulating check user time
             when (result) {
                 is Resource.Success<*> -> {
@@ -48,6 +47,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _loginState.value = ViewModelState.Loading
             val result = loginUseCase.invoke(username, password)
+            Log.d(TAG, "loginUser: $result")
             delay(2000) // simulating login time
             when (result) {
                 is Resource.Success<*> -> _loginState.value = ViewModelState.Result(result.data)

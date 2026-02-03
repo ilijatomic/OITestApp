@@ -5,6 +5,9 @@ import com.example.iotestapp.domain.model.Supplier
 import com.example.iotestapp.domain.repo.SuppliersRepository
 import javax.inject.Inject
 
+/**
+ * Use case for getting list of suppliers from DB
+ */
 class GetAllSuppliersUseCase @Inject constructor(
     private val suppliersRepository: SuppliersRepository
 ) {

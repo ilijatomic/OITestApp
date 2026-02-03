@@ -26,7 +26,7 @@ class LoginRepositoryImpl @Inject constructor(
     override suspend fun logout(): Boolean {
         return getLoginUser()?.let {
             userDao.clearUser()
-            return true
+            true
         } ?: false
     }
 }

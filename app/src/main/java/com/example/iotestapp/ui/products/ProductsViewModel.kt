@@ -1,5 +1,6 @@
 package com.example.iotestapp.ui.products
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.Product
@@ -22,10 +23,6 @@ class ProductsViewModel @Inject constructor(
     private val getAllSuppliersUseCase: GetAllSuppliersUseCase,
 ) : BaseViewModel() {
 
-    companion object {
-        const val TAG = "ProductsViewModel"
-    }
-
     private val _productsState = MutableStateFlow<ViewModelState<List<Product>>>(ViewModelState.Result(emptyList()))
     val productsState = _productsState.asStateFlow()
 
@@ -41,7 +38,9 @@ class ProductsViewModel @Inject constructor(
     fun getProducts() {
         viewModelScope.launch {
             _productsState.value = ViewModelState.Loading
-            when (val result = getAllProductsUseCase.invoke()) {
+            val result = getAllProductsUseCase.invoke()
+            Log.d(TAG, "getProducts: $result")
+            when (result) {
                 is Resource.Success<*> -> {
                     result.data?.let { fullList = it }
                     updateSearchQuery(searchQuery)
@@ -59,14 +58,16 @@ class ProductsViewModel @Inject constructor(
                 it.barcode.contains(query, ignoreCase = true) ||
                 it.supplier.name.contains(query, ignoreCase = true)
         }
-
+        Log.d(TAG, "updateSearchQuery: $filtered")
         _productsState.value = ViewModelState.Result(filtered)
     }
 
     fun saveProduct(product: Product) {
         viewModelScope.launch {
             _saveProductState.value = ViewModelState.Loading
-            when (val result = addEditProductUseCase.invoke(product)) {
+            val result = addEditProductUseCase.invoke(product)
+            Log.d(TAG, "saveProduct: $result")
+            when (result) {
                 is Resource.Success<*> -> {
                     getProducts()
                     _saveProductState.value = ViewModelState.Result(true)
@@ -79,7 +80,9 @@ class ProductsViewModel @Inject constructor(
     fun getSuppliers() {
         viewModelScope.launch {
             _suppliersState.value = ViewModelState.Loading
-            when (val result = getAllSuppliersUseCase.invoke()) {
+            val result = getAllSuppliersUseCase.invoke()
+            Log.d(TAG, "getSuppliers: $result")
+            when (result) {
                 is Resource.Success<*> -> _suppliersState.value = ViewModelState.Result(result.data ?: emptyList())
                 is Resource.Error<*> -> postError(result, _suppliersState, TAG)
             }
@@ -87,6 +90,7 @@ class ProductsViewModel @Inject constructor(
     }
 
     fun resetSaveProductState() {
+        Log.d(TAG, "resetSaveProductState: ")
         _saveProductState.value = SaveProductState.Idle
     }
 

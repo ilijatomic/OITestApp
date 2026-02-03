@@ -6,6 +6,9 @@ import com.example.iotestapp.domain.repo.TransactionRepository
 import com.example.testapp.domain.model.Transaction
 import javax.inject.Inject
 
+/**
+ * Use case for adding transaction record
+ */
 class AddTransactionUseCase @Inject constructor(
     private val transactionRepository: TransactionRepository,
 ) {

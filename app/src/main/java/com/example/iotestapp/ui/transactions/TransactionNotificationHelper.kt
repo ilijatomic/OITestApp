@@ -1,7 +1,6 @@
 package com.example.iotestapp.ui.transactions
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context

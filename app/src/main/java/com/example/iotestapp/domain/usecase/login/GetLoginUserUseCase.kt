@@ -5,6 +5,9 @@ import com.example.iotestapp.domain.model.User
 import com.example.iotestapp.domain.repo.LoginRepository
 import javax.inject.Inject
 
+/**
+ * Use case for getting logged in user
+ */
 class GetLoginUserUseCase @Inject constructor(
     private val loginRepository: LoginRepository
 ){

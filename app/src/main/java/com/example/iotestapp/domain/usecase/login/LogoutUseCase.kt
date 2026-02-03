@@ -4,6 +4,9 @@ import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.repo.LoginRepository
 import javax.inject.Inject
 
+/**
+ * Use case for logout active user
+ */
 class LogoutUseCase @Inject constructor(
     private val loginRepository: LoginRepository
 ){

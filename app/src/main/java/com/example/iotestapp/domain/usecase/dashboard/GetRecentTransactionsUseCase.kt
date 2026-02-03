@@ -5,6 +5,10 @@ import com.example.iotestapp.domain.repo.TransactionRepository
 import com.example.testapp.domain.model.Transaction
 import javax.inject.Inject
 
+/**
+ * Use case for getting list of recent transactions
+ * Default limit is 5
+ */
 class GetRecentTransactionsUseCase @Inject constructor(
     private val transactionRepository: TransactionRepository,
 ) {

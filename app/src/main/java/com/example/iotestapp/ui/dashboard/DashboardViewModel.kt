@@ -1,5 +1,6 @@
 package com.example.iotestapp.ui.dashboard
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.Product
@@ -20,11 +21,6 @@ class DashboardViewModel @Inject constructor(
     private val getRecentTransactionsUseCase: GetRecentTransactionsUseCase,
 ) : BaseViewModel() {
 
-    companion object {
-        const val TAG = "DashboardViewModel"
-        const val DEFAULT_LIMIT = 10
-    }
-
     private val _lowStockProductsState = MutableStateFlow<ViewModelState<List<Product>>>(ViewModelState.Loading)
     val lowStockProductsState = _lowStockProductsState.asStateFlow()
 
@@ -34,7 +30,9 @@ class DashboardViewModel @Inject constructor(
     fun loadLowStockProducts() {
         viewModelScope.launch {
             _lowStockProductsState.value = ViewModelState.Loading
-            when (val result = getLowStockProductsUseCase.invoke()) {
+            val result = getLowStockProductsUseCase.invoke()
+            Log.d(TAG, "loadLowStockProducts: $result")
+            when (result) {
                 is Resource.Success<*> -> _lowStockProductsState.value =
                     ViewModelState.Result(result.data ?: emptyList())
                 is Resource.Error<*> -> postError(result, _lowStockProductsState, TAG)
@@ -45,7 +43,9 @@ class DashboardViewModel @Inject constructor(
     fun loadRecentTransactions() {
         viewModelScope.launch {
             _recentTransactionsState.value = ViewModelState.Loading
-            when (val result = getRecentTransactionsUseCase.invoke(DEFAULT_LIMIT)) {
+            val result = getRecentTransactionsUseCase.invoke()
+            Log.d(TAG, "loadRecentTransactions: $result")
+            when (result) {
                 is Resource.Success<*> -> _recentTransactionsState.value =
                     ViewModelState.Result(result.data ?: emptyList())
                 is Resource.Error<*> -> postError(result, _recentTransactionsState, TAG)
