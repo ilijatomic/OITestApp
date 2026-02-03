@@ -37,12 +37,11 @@
 8. Unit Tests
    - written unit test for Login and User (ViewModel, UseCase, Repository)
    - use `./gradlew test` command to run all Unit Test
-9. Notifications
+9. UI Test
+   - written UI automation tests for Login feature
+10. Notifications
    - when transaction for sale is recorder, if that causes a low stock of product, notification will be shown
 
 ## Architecture overview
 ![Architecture Diagram](.github/architecture.png)
 The application follows the MVVM (Model-View-ViewModel) architecture pattern, utilizing the Repository pattern for data management and UseCases for business logic encapsulation.
-
-## Known issues or limitations
-There aren't any UI tests, just a framework setup with propper DI initialization
