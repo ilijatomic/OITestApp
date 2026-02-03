@@ -1,10 +1,8 @@
-package com.example.iotestapp.data
+package com.example.iotestapp.di
 
 import android.content.Context
 import androidx.room.Room
 import com.example.iotestapp.data.local.AppDatabase
-import com.example.iotestapp.data.local.dao.UserDao
-import com.example.iotestapp.di.DatabaseModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -28,5 +26,18 @@ object TestDatabaseModule {
     }
 
     @Provides
-    fun provideUserDao(db: AppDatabase): UserDao = db.userDao()
+    @Singleton
+    fun provideUserDao(db: AppDatabase) = db.userDao()
+
+    @Provides
+    @Singleton
+    fun provideSupplierDao(db: AppDatabase) = db.supplierDao()
+
+    @Provides
+    @Singleton
+    fun provideProductDao(db: AppDatabase) = db.productDao()
+
+    @Provides
+    @Singleton
+    fun provideTransactionDao(db: AppDatabase) = db.transactionDao()
 }

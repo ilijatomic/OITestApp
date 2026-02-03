@@ -37,6 +37,10 @@
 8. Unit Tests
    - written unit test for Login and User (ViewModel, UseCase, Repository)
    - use `./gradlew test` command to run all Unit Test
+9. UI Tests
+   - just setup framework for testing
+10. Notifications
+   - when transaction for sale is recorder, if that causes a low stock of product, notification will be shown
 
 ## Architecture overview
 ![Architecture Diagram](.github/architecture.png)

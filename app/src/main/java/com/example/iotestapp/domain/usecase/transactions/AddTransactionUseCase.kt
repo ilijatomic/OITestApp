@@ -9,7 +9,7 @@ import javax.inject.Inject
 class AddTransactionUseCase @Inject constructor(
     private val transactionRepository: TransactionRepository,
 ) {
-    suspend operator fun invoke(transaction: Transaction): Resource<Boolean> {
+    suspend operator fun invoke(transaction: Transaction): Resource<Transaction> {
         return try {
             val hasInvalidInput =
                 (transaction.product.id == null || transaction.product.id <= 0) ||
@@ -21,7 +21,7 @@ class AddTransactionUseCase @Inject constructor(
             }
 
             val result = transactionRepository.addTransaction(transaction)
-            result?.let { return Resource.Success(true) }
+            result?.let { return Resource.Success(it) }
             Resource.Error(R.string.transaction_error_save)
         } catch (e: Exception) {
             Resource.Error(message = e.message.toString())

@@ -51,6 +51,8 @@
     <string name="transaction_filter_type">Filter by type</string>
     <string name="transaction_filter_product">Filter by product</string>
     <string name="transaction_empty">No transactions found.</string>
+    <string name="transaction_notification_title">Low stock</string>
+    <string name="transaction_notification_text">Product \"%1$s\" has low stock %2$d (min %3$d)</string>
 
     <string name="dashboard_low_stock_title">Low stock products</string>
     <string name="dashboard_low_stock_empty">No low stock products.</string>

@@ -9,4 +9,3 @@ interface TransactionRepository {
     suspend fun getAllTransactions(): List<Transaction>
     suspend fun getRecentTransactions(limit: Int): List<Transaction>
 }
-

@@ -31,12 +31,7 @@ class DashboardViewModel @Inject constructor(
     private val _recentTransactionsState = MutableStateFlow<ViewModelState<List<Transaction>>>(ViewModelState.Loading)
     val recentTransactionsState = _recentTransactionsState.asStateFlow()
 
-    init {
-        loadLowStockProducts()
-        loadRecentTransactions()
-    }
-
-    private fun loadLowStockProducts() {
+    fun loadLowStockProducts() {
         viewModelScope.launch {
             _lowStockProductsState.value = ViewModelState.Loading
             when (val result = getLowStockProductsUseCase.invoke()) {
@@ -47,7 +42,7 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
-    private fun loadRecentTransactions() {
+    fun loadRecentTransactions() {
         viewModelScope.launch {
             _recentTransactionsState.value = ViewModelState.Loading
             when (val result = getRecentTransactionsUseCase.invoke(DEFAULT_LIMIT)) {

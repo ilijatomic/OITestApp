@@ -18,6 +18,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +44,10 @@ fun SuppliersScreen(
 
     var showAddDialog by remember { mutableStateOf(false) }
     var editSupplier by remember { mutableStateOf<Supplier?>(null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.getSuppliers()
+    }
 
     Surface(
         modifier = Modifier
@@ -97,7 +102,7 @@ fun SuppliersScreen(
                 viewModel.resetSaveSupplierState()
             }
 
-            if (showAddDialog || editSupplier != null) {
+            if ((showAddDialog || editSupplier != null) && saveSupplierState !is ViewModelState.Loading) {
                 AddEditSupplier(
                     supplier = editSupplier,
                     saveState = saveSupplierState,

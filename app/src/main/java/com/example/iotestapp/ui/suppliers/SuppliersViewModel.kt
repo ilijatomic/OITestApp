@@ -31,10 +31,6 @@ class SuppliersViewModel @Inject constructor(
     private var fullList = emptyList<Supplier>()
     private var searchQuery = ""
 
-    init {
-        getSuppliers()
-    }
-
     fun getSuppliers() {
         viewModelScope.launch {
             _suppliersState.value = ViewModelState.Loading

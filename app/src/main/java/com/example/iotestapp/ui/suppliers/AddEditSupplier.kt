@@ -55,6 +55,8 @@ fun AddEditSupplier(
     val isSaving = saveState is ViewModelState.Loading
 
     Dialog(onDismissRequest = onDismiss) {
+        println("add supplier")
+        
         Surface(shape = RoundedCornerShape(MaterialTheme.dimen.supplierAddDialogShapeSize)) {
             Column(modifier = Modifier.padding(MaterialTheme.dimen.supplierAddDialogPadding)) {
                 Text(

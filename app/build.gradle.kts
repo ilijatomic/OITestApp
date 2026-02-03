@@ -19,7 +19,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.example.iotestapp.data.HiltTestRunner"
+        testInstrumentationRunner = "com.example.iotestapp.di.HiltTestRunner"
     }
 
     buildTypes {
@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.compose.activity)
     implementation(libs.androidx.compose.lifecycle.viewmodel)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

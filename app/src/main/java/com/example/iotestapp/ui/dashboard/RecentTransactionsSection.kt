@@ -44,7 +44,7 @@ fun LazyListScope.RecentTransactionsSection(
             if (transactions.isEmpty()) {
                 item { DashboardMessageCard(text = stringResource(R.string.dashboard_recent_transactions_empty)) }
             } else {
-                items(items = transactions, key = { it.id ?: "${it.product.id}-${it.date}-${it.type}-${it.quantity}" }) {
+                items(items = transactions, key = { "${it.id}-${it.date}" }) {
                     TransactionItem(it)
                 }
             }

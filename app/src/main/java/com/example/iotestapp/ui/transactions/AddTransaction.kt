@@ -40,7 +40,7 @@ import com.example.testapp.domain.model.TransactionType
 @Composable
 fun AddTransaction(
     productsList: ViewModelState.Result<List<Product>>,
-    saveState: ViewModelState<Boolean>,
+    saveState: ViewModelState<Transaction>,
     onDismiss: () -> Unit,
     onConfirm: (Transaction) -> Unit,
 ) {
@@ -58,7 +58,8 @@ fun AddTransaction(
     val inputValid by remember {
         derivedStateOf {
             selectedProduct != null &&
-            (quantityText.toIntOrNull() ?: 0) > 0
+            (quantityText.toIntOrNull() ?: 0) > 0 &&
+            (selectedType != TransactionType.SALE || quantityText.toInt() <= selectedProduct!!.currentStockLevel)
         }
     }
 
@@ -166,14 +167,13 @@ fun AddTransaction(
                     Button(
                         onClick = {
                             val product = selectedProduct ?: return@Button
-                            val qty = quantityText.toIntOrNull() ?: 0
+                            val quantity = quantityText.toIntOrNull() ?: 0
                             onConfirm(
                                 Transaction(
-                                    id = null,
                                     date = System.currentTimeMillis(),
                                     type = selectedType,
                                     product = product,
-                                    quantity = qty,
+                                    quantity = quantity,
                                     notes = notes.takeIf { it.isNotBlank() },
                                 ),
                             )

@@ -29,16 +29,11 @@ class TransactionsViewModel @Inject constructor(
     private val _transactionsState = MutableStateFlow<ViewModelState<List<Transaction>>>(ViewModelState.Result(emptyList()))
     val transactionsState = _transactionsState.asStateFlow()
 
-    private val _saveTransactionState = MutableStateFlow<ViewModelState<Boolean>>(SaveTransactionState.Idle)
+    private val _saveTransactionState = MutableStateFlow<ViewModelState<Transaction>>(SaveTransactionState.Idle)
     val saveTransactionState = _saveTransactionState.asStateFlow()
 
     private val _productsState = MutableStateFlow<ViewModelState<List<Product>>>(ViewModelState.Result(emptyList()))
     val productsState = _productsState.asStateFlow()
-
-    init {
-        getTransactions()
-        getProducts()
-    }
 
     fun getTransactions() {
         viewModelScope.launch {
@@ -57,7 +52,9 @@ class TransactionsViewModel @Inject constructor(
             when (val result = addTransactionUseCase.invoke(transaction)) {
                 is Resource.Success<*> -> {
                     getTransactions()
-                    _saveTransactionState.value = ViewModelState.Result(true)
+                    result.data?.let {
+                        _saveTransactionState.value = ViewModelState.Result(it)
+                    }
                 }
                 is Resource.Error<*> -> postError(result, _saveTransactionState, TAG)
             }
@@ -78,7 +75,7 @@ class TransactionsViewModel @Inject constructor(
         _saveTransactionState.value = SaveTransactionState.Idle
     }
 
-    sealed class SaveTransactionState : ViewModelState<Boolean>() {
+    sealed class SaveTransactionState : ViewModelState<Transaction>() {
         data object Idle : SaveTransactionState()
     }
 }

@@ -1,9 +1,9 @@
-package com.example.iotestapp.data
+package com.example.iotestapp.di
 
 import android.app.Application
 import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
-import com.example.iotestapp.OIApplication
+import dagger.hilt.android.testing.HiltTestApplication
 
 class HiltTestRunner : AndroidJUnitRunner() {
     override fun newApplication(
@@ -11,6 +11,6 @@ class HiltTestRunner : AndroidJUnitRunner() {
         className: String,
         context: Context
     ): Application {
-        return super.newApplication(classLoader, OIApplication::class.java.name, context)
+        return super.newApplication(classLoader, HiltTestApplication::class.java.name, context)
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,12 +39,17 @@ fun ProductsScreen(
     viewModel: ProductsViewModel = hiltViewModel(),
 ) {
     var searchQuery by remember { mutableStateOf("") }
-    val productsList by viewModel.productsState.collectAsState()
-    val suppliersList by viewModel.suppliersState.collectAsState()
-    val saveProduct by viewModel.saveProductState.collectAsState()
+    val productsState by viewModel.productsState.collectAsState()
+    val suppliersState by viewModel.suppliersState.collectAsState()
+    val saveProductState by viewModel.saveProductState.collectAsState()
 
     var showAddDialog by remember { mutableStateOf(false) }
     var editProduct by remember { mutableStateOf<Product?>(null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.getProducts()
+        viewModel.getSuppliers()
+    }
 
     Surface(
         modifier = Modifier
@@ -67,7 +73,7 @@ fun ProductsScreen(
                 )
                 HorizontalSpacerLarge()
 
-                when (productsList) {
+                when (productsState) {
                     is ViewModelState.Loading -> {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             CircularProgressIndicator()
@@ -75,7 +81,7 @@ fun ProductsScreen(
                     }
                     is ViewModelState.Result -> {
                         ProductsList(
-                            (productsList as ViewModelState.Result<List<Product>>).data,
+                            (productsState as ViewModelState.Result<List<Product>>).data,
                             stringResource(R.string.product_empty),
                             { editProduct = it },
                         )
@@ -92,17 +98,17 @@ fun ProductsScreen(
                 Icon(Icons.Filled.Add, contentDescription = "Add product")
             }
 
-            if (saveProduct is ViewModelState.Result) {
+            if (saveProductState is ViewModelState.Result) {
                 showAddDialog = false
                 editProduct = null
                 viewModel.resetSaveProductState()
             }
 
-            if (showAddDialog || editProduct != null) {
+            if ((showAddDialog || editProduct != null) && saveProductState !is ViewModelState.Loading) {
                 AddEditProduct(
                     product = editProduct,
-                    suppliersList = suppliersList as ViewModelState.Result,
-                    saveState = saveProduct,
+                    suppliersList = suppliersState as ViewModelState.Result,
+                    saveState = saveProductState,
                     onDismiss = {
                         showAddDialog = false
                         editProduct = null

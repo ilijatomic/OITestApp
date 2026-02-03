@@ -2,6 +2,13 @@
 
 package com.example.iotestapp.ui.transactions
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresPermission
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,6 +37,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +45,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Product
@@ -53,6 +63,7 @@ import com.example.testapp.domain.model.TransactionType
 fun TransactionsScreen(
     viewModel: TransactionsViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val transactionsState by viewModel.transactionsState.collectAsState()
     val productsState by viewModel.productsState.collectAsState()
     val saveTransactionState by viewModel.saveTransactionState.collectAsState()
@@ -61,6 +72,21 @@ fun TransactionsScreen(
 
     var selectedType: TransactionType? by remember { mutableStateOf(null) }
     var selectedProduct: Product? by remember { mutableStateOf(null) }
+
+    var pendingLowStockProduct by remember { mutableStateOf<Product?>(null) }
+    val permissionLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) {
+            pendingLowStockProduct?.let {
+                showTransactionAddedNotification(context, it)
+                pendingLowStockProduct = null
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getTransactions()
+        viewModel.getProducts()
+    }
 
     Surface(
         modifier = Modifier
@@ -114,12 +140,17 @@ fun TransactionsScreen(
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add transaction")
             }
+
             if (saveTransactionState is ViewModelState.Result) {
                 showAddDialog = false
+                val product = (saveTransactionState as ViewModelState.Result<Transaction>).data.product
+                if (product.currentStockLevel < product.minimumStockLevel) {
+                    pendingLowStockProduct = product
+                }
                 viewModel.resetSaveTransactionState()
             }
 
-            if (showAddDialog) {
+            if (showAddDialog && saveTransactionState !is ViewModelState.Loading) {
                 AddTransaction(
                     productsList = productsState as ViewModelState.Result,
                     saveState = saveTransactionState,
@@ -129,6 +160,23 @@ fun TransactionsScreen(
                     },
                     onConfirm = { viewModel.saveTransaction(it) },
                 )
+            }
+
+            pendingLowStockProduct?.let {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (
+                        ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
+                        PackageManager.PERMISSION_GRANTED
+                    ) {
+                        showTransactionAddedNotification(context, it)
+                        pendingLowStockProduct = null
+                    } else {
+                        permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                } else {
+                    showTransactionAddedNotification(context, it)
+                    pendingLowStockProduct = null
+                }
             }
         }
     }
@@ -265,4 +313,3 @@ private fun TransactionFilterSection(
         }
     }
 }
-
