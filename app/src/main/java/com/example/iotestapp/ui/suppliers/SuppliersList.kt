@@ -14,7 +14,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Supplier
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
 import com.example.iotestapp.ui.theme.dimen
@@ -70,18 +72,18 @@ fun SupplierItem(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = supplier.name,
+                text = "${stringResource(R.string.name)}: ${supplier.name}",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Medium
             )
             HorizontalSpacerSmall()
             Text(
-                text = supplier.contactPerson,
+                text = "${stringResource(R.string.contact_person)}: ${supplier.contactPerson}",
                 style = MaterialTheme.typography.bodySmall,
             )
             HorizontalSpacerSmall()
             Text(
-                text = supplier.phone,
+                text = "${stringResource(R.string.phone)}: ${supplier.phone}",
                 style = MaterialTheme.typography.bodySmall,
             )
         }

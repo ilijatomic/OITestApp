@@ -13,6 +13,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.iotestapp.R
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
 import com.example.iotestapp.ui.common.formattedDate
 import com.example.iotestapp.ui.theme.dimen
@@ -63,7 +65,7 @@ fun TransactionItem(
             )
             HorizontalSpacerSmall()
             Text(
-                text = transaction.product.name,
+                text = "${stringResource(R.string.product)}: ${transaction.product.name}",
                 style = MaterialTheme.typography.bodySmall,
             )
             HorizontalSpacerSmall()

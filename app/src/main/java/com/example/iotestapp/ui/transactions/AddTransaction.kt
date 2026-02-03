@@ -80,7 +80,7 @@ fun AddTransaction(
                         value = selectedProduct?.name.orEmpty(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text(stringResource(R.string.product_title)) },
+                        label = { Text(stringResource(R.string.product)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = productExpanded) },
                         enabled = !isSaving && productsList.data.isNotEmpty(),
                     )

@@ -21,6 +21,7 @@
     <string name="category">Category</string>
     <string name="barcode">Barcode</string>
     <string name="supplier">Supplier</string>
+    <string name="product">Product</string>
     <string name="current_stock_level">Current stock level</string>
     <string name="minimum_stock_level">Minimum stock level</string>
 

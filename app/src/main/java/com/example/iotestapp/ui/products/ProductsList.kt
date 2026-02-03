@@ -14,7 +14,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.example.iotestapp.R
 import com.example.iotestapp.domain.model.Product
 import com.example.iotestapp.ui.common.HorizontalSpacerSmall
 import com.example.iotestapp.ui.theme.dimen
@@ -68,23 +70,23 @@ fun ProductItem(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                text = product.name,
+                text = "${stringResource(R.string.name)}: ${product.name}",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Medium,
             )
             HorizontalSpacerSmall()
             Text(
-                text = product.description,
+                text = "${stringResource(R.string.description)}: ${product.description}",
                 style = MaterialTheme.typography.bodySmall
             )
             HorizontalSpacerSmall()
             Text(
-                text = product.supplier.name,
+                text = "${stringResource(R.string.supplier)}: ${product.supplier.name}",
                 style = MaterialTheme.typography.bodySmall
             )
             HorizontalSpacerSmall()
             Text(
-                text = product.currentStockLevel.toString(),
+                text = "${stringResource(R.string.current_stock_level)}: ${product.currentStockLevel}",
                 style = MaterialTheme.typography.bodySmall,
                 color = if (product.currentStockLevel < product.minimumStockLevel) {
                     MaterialTheme.colorScheme.error
