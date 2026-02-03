@@ -7,7 +7,7 @@ import javax.inject.Inject
 class LogoutUseCase @Inject constructor(
     private val loginRepository: LoginRepository
 ){
-    suspend operator fun invoke() : Resource<Unit> {
+    suspend operator fun invoke() : Resource<Boolean> {
         return try {
             Resource.Success(loginRepository.logout())
         } catch (e: Exception) {

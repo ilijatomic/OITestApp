@@ -19,11 +19,14 @@ class LoginRepositoryImpl @Inject constructor(
         return userDao.getUserById(id)?.toDomain()
     }
 
-    override suspend fun checkLogin(): User? {
+    override suspend fun getLoginUser(): User? {
         return userDao.getLoginUser()?.toDomain()
     }
 
-    override suspend fun logout() {
-        return userDao.clearUser()
+    override suspend fun logout(): Boolean {
+        return getLoginUser()?.let {
+            userDao.clearUser()
+            return true
+        } ?: false
     }
 }

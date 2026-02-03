@@ -4,6 +4,6 @@ import com.example.iotestapp.domain.model.User
 
 interface LoginRepository {
     suspend fun login(user: User): User?
-    suspend fun checkLogin(): User?
-    suspend fun logout()
+    suspend fun getLoginUser(): User?
+    suspend fun logout(): Boolean
 }

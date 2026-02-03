@@ -31,6 +31,11 @@
    - filter transactions by product name and type
    - add new transaction
 6. Logout
+7. Offline support
+   - application works without active internet connection
+   - assuming that sync would be added latter as feature that would re-trigger read from repository but this time use Remote instead of Local
+8. Unit Tests
+   - written unit test for Login and User
 
 ## Architecture overview
 ![Architecture Diagram](.github/architecture.png)

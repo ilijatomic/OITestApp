@@ -3,7 +3,7 @@ package com.example.iotestapp.ui.login
 import androidx.lifecycle.viewModelScope
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.model.User
-import com.example.iotestapp.domain.usecase.login.GetLoggedInUserUseCase
+import com.example.iotestapp.domain.usecase.login.GetLoginUserUseCase
 import com.example.iotestapp.domain.usecase.login.LoginUseCase
 import com.example.iotestapp.ui.common.BaseViewModel
 import com.example.iotestapp.ui.common.ViewModelState
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val getLoggedInUserUseCase: GetLoggedInUserUseCase,
+    private val getLoginUserUseCase: GetLoginUserUseCase,
 ) : BaseViewModel() {
     companion object {
         const val TAG = "LoginViewModel"
@@ -26,14 +26,11 @@ class LoginViewModel @Inject constructor(
     private val _loginState = MutableStateFlow<ViewModelState<User?>>(LoginState.Checking)
     val loginState = _loginState.asStateFlow()
 
-    init {
-        checkIfUserIsLoggedIn()
-    }
-
     fun checkIfUserIsLoggedIn() {
         viewModelScope.launch {
+            val result = getLoginUserUseCase.invoke()
             delay(2000) // simulating check user time
-            when (val result = getLoggedInUserUseCase.invoke()) {
+            when (result) {
                 is Resource.Success<*> -> {
                     result.data?.let {
                         _loginState.value = ViewModelState.Result(it)
