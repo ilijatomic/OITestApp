@@ -1,4 +1,4 @@
-package com.example.iotestapp.domain
+package com.example.iotestapp.usecase.login
 
 import com.example.iotestapp.domain.common.Resource
 import com.example.iotestapp.domain.repo.LoginRepository
@@ -25,7 +25,7 @@ class GetLoginUserUseCaseTest {
     }
 
     @Test
-    fun `invoke returns success with user data`() = runTest {
+    fun `returns success with user data`() = runTest {
         val mockUser = UserMocks.validUser
         coEvery { loginRepository.getLoginUser() } returns mockUser
 
@@ -36,7 +36,7 @@ class GetLoginUserUseCaseTest {
     }
 
     @Test
-    fun `invoke returns error when user not found`() = runTest {
+    fun `returns error when user not found`() = runTest {
         coEvery { loginRepository.getLoginUser() } throws Exception()
 
         val result = getLoginUserUseCase.invoke()
@@ -46,7 +46,7 @@ class GetLoginUserUseCaseTest {
     }
 
     @Test
-    fun `invoke returns null when no user logged in`() = runTest {
+    fun `returns null when no user logged in`() = runTest {
         coEvery { loginRepository.getLoginUser() } returns null
 
         val result = getLoginUserUseCase.invoke()

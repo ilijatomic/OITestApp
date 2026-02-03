@@ -35,7 +35,8 @@
    - application works without active internet connection
    - assuming that sync would be added latter as feature that would re-trigger read from repository but this time use Remote instead of Local
 8. Unit Tests
-   - written unit test for Login and User
+   - written unit test for Login and User (ViewModel, UseCase, Repository)
+   - use `./gradlew test` command to run all Unit Test
 
 ## Architecture overview
 ![Architecture Diagram](.github/architecture.png)

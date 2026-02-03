@@ -1,16 +1,15 @@
-package com.example.iotestapp.data
+package com.example.iotestapp.repo.login
 
 import com.example.iotestapp.data.local.dao.UserDao
 import com.example.iotestapp.data.repository.LoginRepositoryImpl
 import com.example.iotestapp.domain.mappers.toEntity
 import com.example.iotestapp.domain.repo.LoginRepository
+import com.example.iotestapp.repo.DBSetup
 import com.example.iotestapp.resources.UserMocks
-import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.spyk
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
@@ -32,7 +31,7 @@ class LoginRepositoryTest: DBSetup() {
 
         val result = loginRepository.login(mockUser)?.copy(password = "admin")
 
-        assertEquals(mockUser, result)
+        Assert.assertEquals(mockUser, result)
         coVerify(exactly = 1) { spyDao.loginUser(mockUser.toEntity()) }
     }
 
@@ -42,7 +41,7 @@ class LoginRepositoryTest: DBSetup() {
 
         val result = loginRepository.login(mockUser)
 
-        assertNull(result)
+        Assert.assertNull(result)
         coVerify(exactly = 0) { spyDao.loginUser(mockUser.toEntity()) }
     }
 
@@ -53,7 +52,7 @@ class LoginRepositoryTest: DBSetup() {
 
         val result = loginRepository.getLoginUser()
 
-        assertEquals(mockUser.username, result?.username)
+        Assert.assertEquals(mockUser.username, result?.username)
         coVerify(exactly = 1) { spyDao.loginUser(mockUser.toEntity()) }
         coVerify(exactly = 1) { spyDao.getLoginUser() }
     }
@@ -62,7 +61,7 @@ class LoginRepositoryTest: DBSetup() {
     fun `returns null when no user logged in`() = runTest {
         val result = loginRepository.getLoginUser()
 
-        assertNull(result)
+        Assert.assertNull(result)
         coVerify(exactly = 1) { spyDao.getLoginUser() }
     }
 
@@ -73,7 +72,7 @@ class LoginRepositoryTest: DBSetup() {
 
         val result = loginRepository.logout()
 
-        assertEquals(true, result)
+        Assert.assertEquals(true, result)
         coVerify(exactly = 1) { spyDao.loginUser(mockUser.toEntity()) }
         coVerify(exactly = 1) { spyDao.getLoginUser() }
         coVerify(exactly = 1) { spyDao.clearUser() }
@@ -83,7 +82,7 @@ class LoginRepositoryTest: DBSetup() {
     fun `logout returns false when no user logged in`() = runTest {
         val result = loginRepository.logout()
 
-        assertEquals(false, result)
+        Assert.assertEquals(false, result)
         coVerify(exactly = 1) { spyDao.getLoginUser() }
     }
 

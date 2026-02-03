@@ -1,4 +1,4 @@
-package com.example.iotestapp.ui
+package com.example.iotestapp.viewmodel.login
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

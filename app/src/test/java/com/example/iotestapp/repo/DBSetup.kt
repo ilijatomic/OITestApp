@@ -1,4 +1,4 @@
-package com.example.iotestapp.data
+package com.example.iotestapp.repo
 
 import androidx.room.Room
 import com.example.iotestapp.data.local.AppDatabase
@@ -9,7 +9,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
-open class DBSetup {
+abstract class DBSetup {
     lateinit var db: AppDatabase
 
     @Before

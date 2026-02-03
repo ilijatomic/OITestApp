@@ -1,4 +1,4 @@
-package com.example.iotestapp.ui
+package com.example.iotestapp.viewmodel.login
 
 import app.cash.turbine.test
 import com.example.iotestapp.domain.common.Resource
@@ -13,7 +13,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
