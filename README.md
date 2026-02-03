@@ -15,7 +15,7 @@
 1. Login
 2. Dashboard (Home)
    - list of low stock items
-   - list of last 10 transactions
+   - list of last 5 transactions
 3. Products
    - list of products with item showing name, description, supplier name, current stock (in red if below minimum stock)
    - search products by name, category, supplier, barcode
